@@ -2,7 +2,7 @@
 
 СКУД на основе сиамской нейронной сети (на базе MobileNetV3 https://arxiv.org/pdf/1905.02244.pdf) с обратной свзяью
 
-
+![](images/filename JUIO (1).png)
 
 
 
