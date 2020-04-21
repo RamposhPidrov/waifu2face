@@ -10,8 +10,8 @@
 
 Нейросеть TensorFlow+Keras
 
-Мобильное приложение на Kotlin
+Мобильное приложение на Kotlin/Angular (решаем)
 
-REST API на Flaks\Django (выбираем)
+REST API на Django
 
 
