@@ -61,6 +61,7 @@ export class ModelUploadComponent implements OnInit {
           //model.predict({ImageTensor: tensor})
           console.log([tf.image.resizeBilinear(tf.browser.fromPixels(imgEl), [300, 300]).expandDims(), tf.image.resizeBilinear(tf.browser.fromPixels(imgEl2), [300, 300]).expandDims()]);
           this.predictions = await this.model.predict([tf.image.resizeBilinear(tf.browser.fromPixels(imgEl), [300, 300]).expandDims(), tf.image.resizeBilinear(tf.browser.fromPixels(imgEl2), [300, 300]).expandDims()]);
+          //this.predictions = await this.model.predict(tf.image.resizeBilinear(tf.browser.fromPixels(imgEl),[300,300]).expandDims(), tf.image.resizeBilinear(tf.browser.fromPixels(imgEl2),[300,300]).expandDims());
 
           // this.predictions = await this.model.predict(tf.browser.fromPixels(imgEl, imgEl2));
         }, 0);
