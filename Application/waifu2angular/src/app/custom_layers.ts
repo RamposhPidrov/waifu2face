@@ -6,9 +6,12 @@ export class HardSwish extends tf.layers.Layer {
 
   //return x * K.relu(x + 3.0, max_value=6.0) / 6.0
   alpha:any;
-  constructor(config) {
-    super(config);
-    this.alpha = config.alpha;
+  // constructor(config) {
+  //   super(config);
+  //   this.alpha = config.alpha;
+  // }
+  constructor() {
+    super({})
   }
 
   call(input) {
@@ -40,9 +43,12 @@ export class Relu6 extends tf.layers.Layer {
 
   //return x * K.relu(x + 3.0, max_value=6.0) / 6.0
   alpha:any;
-  constructor(config) {
-    super(config);
-    this.alpha = config.alpha;
+  // constructor(config) {
+  //   super(config);
+  //   this.alpha = config.alpha;
+  // }
+  constructor() {
+    super({})
   }
 
   call(input) {
@@ -73,6 +79,13 @@ export class Relu6 extends tf.layers.Layer {
 export class Lambda extends tf.layers.Layer {
   constructor() {
     super({})
+  }
+
+  call(input) {
+    return tf.tidy(() => {
+      return input;
+      //return tf.sigmoid(x.mul(this.alpha)).mul(x);
+    });
   }
 
   static get className() {
