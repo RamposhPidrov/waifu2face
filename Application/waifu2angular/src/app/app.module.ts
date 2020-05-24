@@ -7,13 +7,16 @@ import { AppComponent } from './app.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ProfileComponent } from './profile/profile.component';
+import { ModelUploadComponent } from './model-upload/model-upload.component';
+
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    ProfileComponent
+    ProfileComponent,
+    ModelUploadComponent
   ],
   imports: [
     BrowserModule,
