@@ -1,13 +1,17 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import * as tf from '@tensorflow/tfjs';
 import { Prediction } from '../prediction';
-
-
+import { HardSwish, Relu6, Lambda } from '../custom_layers';
+tf.serialization.registerClass(HardSwish);  // Needed for serialization.
+tf.serialization.registerClass(Relu6);  // Needed for serialization.
+tf.serialization.registerClass(Lambda);  // Needed for serialization.
+tf.ENV.set('WEBGL_PACK', false);
 @Component({
   selector: 'app-model-upload',
   templateUrl: './model-upload.component.html',
   styleUrls: ['./model-upload.component.css']
 })
+
 export class ModelUploadComponent implements OnInit {
   imageSrc: string;
   @ViewChild('img') imageEl: ElementRef;
@@ -23,6 +27,7 @@ export class ModelUploadComponent implements OnInit {
 
 
   async ngOnInit() {
+
     this.loading = true;
     console.log('loading model...');
 
@@ -44,14 +49,16 @@ export class ModelUploadComponent implements OnInit {
         this.imageSrc = res.target.result;
         setTimeout(async () => {
           const imgEl = this.imageEl.nativeElement;
-          this.predictions = await this.model.predict(imgEl, imgEl);
+          console.log(imgEl);
+          const imgEl2 = this.imageEl.nativeElement;
+          tf.ENV.set('WEBGL_PACK', false);
+          this.predictions = await this.model.predict(imgEl, imgEl2);
         }, 0);
 
       };
     }
 
   }
-
 
 
 }
