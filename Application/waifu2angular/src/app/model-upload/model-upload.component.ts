@@ -19,7 +19,9 @@ export class ModelUploadComponent implements OnInit {
   @ViewChild('img') imageEl: ElementRef;
 
   private model;
+  private model_cropper;
   predictions: tf.Tensor[];
+  cropper: tf.Tensor[];
   
   DJANGO_SERVER = 'http://127.0.0.1:8000'
   loading: boolean;
@@ -35,11 +37,12 @@ export class ModelUploadComponent implements OnInit {
 
     const MODEL_URL = this.DJANGO_SERVER + '/media/cropper_model/model.json';
     const cal = await loadGraphModel(MODEL_URL);
-    this.model = cal
+    this.model_cropper = cal
    //this.model = await tf.loadLayersModel(this.DJANGO_SERVER + '/media/model.json')
     
     // console.log(this.model.execute());
     this.model = await tf.loadLayersModel(this.DJANGO_SERVER + '/media/model.json')
+    console.log(this.model.getLayer('model_3'))
     console.log(this.model.summary());
     
     console.log(this.model);
@@ -59,9 +62,11 @@ export class ModelUploadComponent implements OnInit {
         this.imageSrc = res.target.result;
         setTimeout(async () => {
           const imgEl = this.imageEl.nativeElement;
-          this.predictions = await this.model.executeAsync(tf.browser.fromPixels(imgEl).expandDims())
+          this.cropper = await this.model_cropper.executeAsync((tf.browser.fromPixels(imgEl).expandDims()))
 
-          console.log(tf.concat([this.predictions[0].reshape([-1, 4]), this.predictions[1].reshape([100, 1])], 1).arraySync())
+
+
+          console.log(tf.concat([this.cropper[0].reshape([-1, 4]), this.cropper[1].reshape([100, 1])], 1).arraySync())
         
 
           
@@ -72,8 +77,9 @@ export class ModelUploadComponent implements OnInit {
 
           // const tensor =  tf.image.resizeBilinear(tf.browser.fromPixels(imgEl), [300, 300]).expandDims()
           //model.predict({ImageTensor: tensor})
-          console.log([tf.image.resizeBilinear(tf.browser.fromPixels(imgEl), [300, 300]).expandDims(), tf.image.resizeBilinear(tf.browser.fromPixels(imgEl2), [300, 300]).expandDims()]);
-          this.predictions = await this.model.predict([tf.image.resizeBilinear(tf.browser.fromPixels(imgEl), [300, 300]).expandDims(), tf.image.resizeBilinear(tf.browser.fromPixels(imgEl2), [300, 300]).expandDims()]);
+          // console.log([tf.image.resizeBilinear(tf.browser.fromPixels(imgEl), [300, 300]).expandDims().toFloat(), tf.image.resizeBilinear(tf.browser.fromPixels(imgEl2), [300, 300]).expandDims().toFloat()]);
+          this.predictions = await this.model.predict([tf.image.resizeBilinear(tf.browser.fromPixels(imgEl), [300, 300]).expandDims().toFloat(), tf.image.resizeBilinear(tf.browser.fromPixels(imgEl2), [300, 300]).expandDims().toFloat()]);
+          console.log(this.predictions)
           //this.predictions = await this.model.predict(tf.image.resizeBilinear(tf.browser.fromPixels(imgEl),[300,300]).expandDims(), tf.image.resizeBilinear(tf.browser.fromPixels(imgEl2),[300,300]).expandDims());
 
           // this.predictions = await this.model.predict(tf.browser.fromPixels(imgEl, imgEl2));

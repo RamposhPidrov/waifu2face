@@ -16,8 +16,9 @@ export class HardSwish extends tf.layers.Layer {
 
   call(input) {
     return tf.tidy(() => {
-      const x = input[0]; //tf.getExactlyOneTensor(input);
-      return tf.relu6(x+3.0);
+     
+      let x = input.toFloat(); 
+      return tf.mul(x, tf.relu6(x.add(3.0))).div(6.0);
       //return tf.sigmoid(x.mul(this.alpha)).mul(x);
     });
   }
@@ -53,7 +54,7 @@ export class Relu6 extends tf.layers.Layer {
 
   call(input) {
     return tf.tidy(() => {
-      const x = input[0]; //tf.getExactlyOneTensor(input);
+      const x = input.toFloat(); //tf.getExactlyOneTensor(input);
       return tf.relu6(x);
       //return tf.sigmoid(x.mul(this.alpha)).mul(x);
     });
@@ -82,7 +83,9 @@ export class Lambda extends tf.layers.Layer {
   }
 
   call(input) {
-    return tf.tidy(() => {
+    return tf.tidy(() => {  
+      console.log(input[0].dataSync())
+      console.log(tf.squaredDifference(input[0], input[1]).dataSync())
       return input;
       //return tf.sigmoid(x.mul(this.alpha)).mul(x);
     });
