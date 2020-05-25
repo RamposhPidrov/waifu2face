@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import * as tf from '@tensorflow/tfjs';
 import { Prediction } from '../prediction';
+import {loadGraphModel} from '@tensorflow/tfjs-converter';
 
 
 @Component({
@@ -13,7 +14,7 @@ export class ModelUploadComponent implements OnInit {
   @ViewChild('img') imageEl: ElementRef;
 
   private model;
-  predictions: Prediction[];
+  predictions: tf.Tensor[];
   
   DJANGO_SERVER = 'http://127.0.0.1:8000'
   loading: boolean;
@@ -26,8 +27,12 @@ export class ModelUploadComponent implements OnInit {
     this.loading = true;
     console.log('loading model...');
 
-    this.model = await tf.loadLayersModel(this.DJANGO_SERVER + '/media/model.json')
-    console.log(this.model.summary());
+    const MODEL_URL = this.DJANGO_SERVER + '/media/cropper_model/model.json';
+    const cal = await loadGraphModel(MODEL_URL);
+    this.model = cal
+   //this.model = await tf.loadLayersModel(this.DJANGO_SERVER + '/media/model.json')
+    
+    // console.log(this.model.execute());
     console.log('Sucessfully loaded model');
 
 
@@ -44,7 +49,17 @@ export class ModelUploadComponent implements OnInit {
         this.imageSrc = res.target.result;
         setTimeout(async () => {
           const imgEl = this.imageEl.nativeElement;
-          this.predictions = await this.model.predict(imgEl, imgEl);
+          //console.log([tf.browser.fromPixels(imgEl).slice([0], [-1, -1, 3])])
+          this.predictions = await this.model.executeAsync(tf.browser.fromPixels(imgEl).expandDims())
+          
+          // var newArr = [];
+          // while(this.predictions[0].dataSync().length) newArr.push(this.predictions[0].dataSync());
+
+          // console.log(this.predictions[0].reshape([-1, 4]).arraySync())
+          console.log(tf.concat([this.predictions[0].reshape([-1, 4]), this.predictions[1].reshape([100, 1])], 1).arraySync())
+        
+          // console.log('done')
+          // this.predictions = await this.model.predict(imgEl, imgEl);
         }, 0);
 
       };

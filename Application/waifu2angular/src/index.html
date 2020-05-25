@@ -20,60 +20,13 @@
     // https://github.com/tensorflow/tfjs-examples/blob/master/custom-layer/custom_layer.js
     // https://gist.github.com/caisq/33ed021e0c7b9d0e728cb1dce399527d
     // https://github.com/tensorflow/tfjs-layers/blob/master/src/activations.ts
-    class HardSwish extends tf.layers.Layer {
-      static className = 'HardSwish';
-      
-      constructor(config) {
-        super(config);
-        this.alpha = config.alpha;
-      }
+    
+    // import * as tf from '@tensorflow/tfjs';
+    // import {loadGraphModel} from '@tensorflow/tfjs-converter';
 
-      call(input) {
-        return tf.tidy(() => {
-          const x = input[0]; //tf.getExactlyOneTensor(input);
-          return tf.sigmoid(x.mul(this.alpha)).mul(x);
-        });
-      }
-
-      computeOutputShape(inputShape){
-        return inputShape;
-      }
-
-      static get className() {
-      return 'HardSwish';
-      }
-
-      getConfig() {
-        const config = {alpha: this.alpha};
-        const baseConfig = super.getConfig();
-        Object.assign(config, baseConfig);
-        return config;
-      }
-    }
-
-    tf.serialization.registerClass(HardSwish);
-
-    class HardSwish2 extends tf.layers.activation {
-      static get className() {return 'HardSwish2'};
-      apply(x, alpha = 1) {
-        return tf.sigmoid(x.mul(this.alpha)).mul(x);
-      }
-    }
-
-    tf.serialization.registerClass(HardSwish2);
-
-    const sw = new HardSwish({alpha: 1});
-    const sw2 = new HardSwish2(1);
-    // create Model
-    const m_in = tf.input({shape: [1]});
-    // this doesn't work!!! activations have to be defined manually as layers and then added, see below
-    //const test = tf.layers.dense({units: 8, activation: sw}).apply(m_in);
-    // sw2 can't be called this way either, yields 'Improper config format' error
-    //const test2 = tf.layers.dense({units: 8, activation: sw2}).apply(m_in);
-    const dense1 = tf.layers.dense({units: 8}).apply(m_in);
-    const swa = sw.apply(dense1);
-    const m_out = tf.layers.dense({units: 1}).apply(swa);
-    const model = tf.model({inputs: m_in, outputs: m_out});
+   
+    // const cat = document.getElementById('cat');
+    // model.execute(tf.browser.fromPixels(cat));
 
   </script>
 </html>
