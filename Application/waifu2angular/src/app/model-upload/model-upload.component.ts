@@ -19,20 +19,19 @@ export class ModelUploadComponent implements OnInit {
 
   private model;
   predictions: Prediction[];
-  
+  test:string;
   DJANGO_SERVER = 'http://127.0.0.1:8000'
   loading: boolean;
 
 
   constructor() { }
 
-
   async ngOnInit() {
 
     this.loading = true;
     console.log('loading model...');
 
-    this.model = await tf.loadLayersModel(this.DJANGO_SERVER + '/media/model.json')
+    this.model = await tf.loadLayersModel(this.DJANGO_SERVER + '/media/mobilenet/model.json')
     console.log(this.model.summary());
     
     console.log(this.model);
@@ -60,9 +59,13 @@ export class ModelUploadComponent implements OnInit {
           // const tensor =  tf.image.resizeBilinear(tf.browser.fromPixels(imgEl), [300, 300]).expandDims()
           //model.predict({ImageTensor: tensor})
           console.log([tf.image.resizeBilinear(tf.browser.fromPixels(imgEl), [300, 300]).expandDims(), tf.image.resizeBilinear(tf.browser.fromPixels(imgEl2), [300, 300]).expandDims()]);
-          this.predictions = await this.model.predict([tf.image.resizeBilinear(tf.browser.fromPixels(imgEl), [300, 300]).expandDims(), tf.image.resizeBilinear(tf.browser.fromPixels(imgEl2), [300, 300]).expandDims()]);
-          //this.predictions = await this.model.predict(tf.image.resizeBilinear(tf.browser.fromPixels(imgEl),[300,300]).expandDims(), tf.image.resizeBilinear(tf.browser.fromPixels(imgEl2),[300,300]).expandDims());
+          //this.predictions = await this.model.predict([tf.image.resizeBilinear(tf.browser.fromPixels(imgEl), [300, 300]).expandDims(), tf.image.resizeBilinear(tf.browser.fromPixels(imgEl2), [300, 300]).expandDims()]);
 
+          // this.predictions = await this.model.predict(tf.image.resizeBilinear(tf.browser.fromPixels(imgEl), [300, 300]).expandDims());
+          // this.predictions = await this.model.predict(tf.browser.fromPixels(imgEl).expandDims());
+          console.log(tf.image.resizeBilinear(tf.browser.fromPixels(imgEl), [300,300]).expandDims())
+          this.predictions = await this.model.predict(tf.image.resizeBilinear(tf.browser.fromPixels(imgEl), [300,300]).expandDims());
+          
           // this.predictions = await this.model.predict(tf.browser.fromPixels(imgEl, imgEl2));
         }, 0);
 
@@ -73,4 +76,33 @@ export class ModelUploadComponent implements OnInit {
 
 
 }
+
+
+  // canvas: HTMLCanvasElement;
+  // context: CanvasRenderingContext2D;
+
+  // cropCal(){
+  //   let canvas = document.getElementById('canvas') as HTMLCanvasElement;
+  //   let context = canvas.getContext("2d");
+  //   var imageObj = new Image();
+
+  //   imageObj.onload = function() {
+  //     // draw cropped image
+  //     var sourceX = 150;
+  //     var sourceY = 0;
+  //     var sourceWidth = 150;
+  //     var sourceHeight = 150;
+  //     var destWidth = sourceWidth;
+  //     var destHeight = sourceHeight;
+  //     var destX = canvas.width / 2 - destWidth / 2;
+  //     var destY = canvas.height / 2 - destHeight / 2;
+
+  //     context.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+  //   };
+  //   imageObj.src = 'http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg';   
+
+  //   this.canvas = canvas;
+  //   this.context = context;
+
+  // }
 

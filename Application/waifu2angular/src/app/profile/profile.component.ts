@@ -29,6 +29,7 @@ export class ProfileComponent implements OnInit {
       this.form.get('profile').setValue(file);
     }
   }
+ 
 
   onSubmit() {
     const formData = new FormData();
