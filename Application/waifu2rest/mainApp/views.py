@@ -30,7 +30,9 @@ class PersonView(APIView):
     def get(self, request):
         persons = Person.objects.all()
         serializer = PersonSerializer(persons, many=True)
-        return Response({"persons": serializer.data})
+        # return Response({"persons": serializer.data})
+        return Response(serializer.data)
+
 
     def post(self, request, *args, **kwargs):
       file_serializer = PersonSerializer(data=request.data)

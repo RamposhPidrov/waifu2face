@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
- 
-import { Person } from '../person';
+
+import { Person } from '../person.model';
 import { PersonService } from '../person.service';
  
 @Component({
@@ -10,7 +10,7 @@ import { PersonService } from '../person.service';
 })
 export class CreatePersonComponent implements OnInit {
  
-  person: Person = new Person();
+  person: Person;
   submitted = false;
  
   constructor(private personService: PersonService) { }
@@ -20,18 +20,19 @@ export class CreatePersonComponent implements OnInit {
  
   newperson(): void {
     this.submitted = false;
-    this.person = new Person();
+    // this.person = new Person();
   }
  
   save() {
-    this.personService.createPerson(this.person)
-      .subscribe(
-        data => {
-          console.log(data);
-          this.submitted = true;
-        },
-        error => console.log(error));
-    this.person = new Person();
+    this.personService.addperson(this.person)
+      // .subscribe(
+      //   data => {
+      //     console.log(data);
+      //     this.submitted = true;
+      //   },
+      //   error => console.log(error));
+      
+    // this.person = new Person();
   }
  
   onSubmit() {

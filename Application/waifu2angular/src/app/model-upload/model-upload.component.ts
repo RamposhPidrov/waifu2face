@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import * as tf from '@tensorflow/tfjs';
-import { Prediction } from '../prediction';
-import { HardSwish, Relu6, Lambda } from '../custom_layers';
+import { Prediction } from '../shared/prediction';
+import { HardSwish, Relu6, Lambda } from '../shared/custom_layers';
 
 tf.serialization.registerClass(HardSwish);  // Needed for serialization.
 tf.serialization.registerClass(Relu6);  // Needed for serialization.
