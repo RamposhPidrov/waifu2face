@@ -10,14 +10,16 @@
   </div>
 
   <ng-template #elseBlock>
-    <img [src]="imageSrc" #img *ngIf="imageSrc"/>
+    <img [src]="imageSrc" id="image" #img *ngIf="imageSrc"/>
   </ng-template>
-
+  
+  <canvas id="myCanvas"></canvas>
   <div class="list-group">
-    <div class="list-group-item" *ngFor="let prediction of predictions">
+    <!-- <div class="list-group-item" *ngFor="let prediction of predictions">
       {{prediction.className}} - {{prediction.probability}}
-    </div>
+    </div> -->
   </div>
+
 
 </div>
 

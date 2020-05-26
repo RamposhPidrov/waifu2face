@@ -1,7 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import * as tf from '@tensorflow/tfjs';
-import { Prediction } from '../shared/prediction';
-import { HardSwish, Relu6, Lambda } from '../shared/custom_layers';
+import { Prediction } from '../prediction';
+import {loadGraphModel} from '@tensorflow/tfjs-converter';
+import { HardSwish, Relu6, Lambda } from '../custom_layers';
+import * as blazeface from '@tensorflow-models/blazeface'
+import { imag } from '@tensorflow/tfjs';
+
 
 tf.serialization.registerClass(HardSwish);  // Needed for serialization.
 tf.serialization.registerClass(Relu6);  // Needed for serialization.
@@ -18,28 +22,71 @@ export class ModelUploadComponent implements OnInit {
   @ViewChild('img') imageEl: ElementRef;
 
   private model;
-  predictions: Prediction[];
-  test:string;
+  private model_cropper;
+  private trashhold_cropper = 0.95;
+  predictions: tf.Tensor[];
+  cropper: tf.Tensor;
+ 
+  
   DJANGO_SERVER = 'http://127.0.0.1:8000'
   loading: boolean;
 
 
-  constructor() { }
+  constructor() {
+    
+    
+   }
 
   async ngOnInit() {
 
     this.loading = true;
     console.log('loading model...');
-
-    this.model = await tf.loadLayersModel(this.DJANGO_SERVER + '/media/mobilenet/model.json')
-    console.log(this.model.summary());
     
-    console.log(this.model);
+    const MODEL_URL = this.DJANGO_SERVER + '/media/cropper_model2/model.json';
+    const cal = await loadGraphModel(MODEL_URL);
+    this.model_cropper = cal
+    console.log(this.model_cropper);
+    this.model_cropper = await blazeface.load();
+   //this.model = await tf.loadLayersModel(this.DJANGO_SERVER + '/media/model.json')
+    
+    console.log(this.model_cropper);
+    this.model = await tf.loadLayersModel(this.DJANGO_SERVER + '/media/model.json')
+
+    // console.log(this.model.summary());
+
+    const NonMaxSuppression = (node) =>
+      tf.image.nonMaxSuppression(
+        node.inputs[0], node.inputs[1],
+        node.attrs['iouThreshold']);
+     
+    
+
+    tf.registerOp("NonMaxSuppression", NonMaxSuppression);
+    
+
     console.log('Sucessfully loaded model');
     console.log(this.model)
 
     this.loading = false;
   }
+
+  async govno() {
+    const predictions = await this.model_cropper.estimateFaces(document.getElementById('image'), false)
+          console.log( predictions)
+
+          
+          if (predictions.length > 0) {
+            for (let i = 0; i < predictions.length; i++) {
+              const start = predictions[i].topLeft;
+              const end = predictions[i].bottomRight;
+              const size = [end[0] - start[0], end[1] - start[1]];
+              console.log(start, end, size)
+              // // Render a rectangle over each detected face.
+              // ctx.fillRect(start[0], start[1], size[0], size[1]);
+            }
+          }
+  }
+
 
   async fileChangeEvent(event) {
     if (event.target.files && event.target.files[0]) {
@@ -51,28 +98,57 @@ export class ModelUploadComponent implements OnInit {
         this.imageSrc = res.target.result;
         setTimeout(async () => {
           const imgEl = this.imageEl.nativeElement;
+          // this.cropper = await this.model_cropper.executeAsync((tf.browser.fromPixels(imgEl).expandDims()))
+          const predictions = await this.model_cropper.estimateFaces(document.getElementById('image'), false)
+          console.log(predictions[0].topLeft);
+          
+
+          var img = document.getElementsByClassName('cont')[0];
+          var canvas = document.createElement('canvas');
+          canvas.id = "mycanvas";
+          
+          img.appendChild(canvas);
+          var context = canvas.getContext('2d');
+          var imageObj = new Image();
+          const start = predictions[0].topLeft;
+          const end = predictions[0].bottomRight;
+          const size = [(end[0] - start[0]) * 0.85, end[1] - start[1]* 0.85];
+          console.log(size);
+          canvas.height = size[1] 
+          canvas.width = size[0]
+
+          imageObj.onload = function() {
+            // draw cropped image
+            var sourceX = start[0];
+            var sourceY = start[1];
+            var sourceWidth = size[1];
+            var sourceHeight = size[0];
+            var destWidth = size[1];
+            var destHeight = size[0];
+            var destX = 0;
+            var destY = 0;
+
+            context.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+          };
+          imageObj.src = imgEl.src
+
+
           console.log(imgEl);
           const imgEl2 = this.imageEl.nativeElement;
           
           
-
-          // const tensor =  tf.image.resizeBilinear(tf.browser.fromPixels(imgEl), [300, 300]).expandDims()
-          //model.predict({ImageTensor: tensor})
-          console.log([tf.image.resizeBilinear(tf.browser.fromPixels(imgEl), [300, 300]).expandDims(), tf.image.resizeBilinear(tf.browser.fromPixels(imgEl2), [300, 300]).expandDims()]);
-          //this.predictions = await this.model.predict([tf.image.resizeBilinear(tf.browser.fromPixels(imgEl), [300, 300]).expandDims(), tf.image.resizeBilinear(tf.browser.fromPixels(imgEl2), [300, 300]).expandDims()]);
-
-          // this.predictions = await this.model.predict(tf.image.resizeBilinear(tf.browser.fromPixels(imgEl), [300, 300]).expandDims());
-          // this.predictions = await this.model.predict(tf.browser.fromPixels(imgEl).expandDims());
-          console.log(tf.image.resizeBilinear(tf.browser.fromPixels(imgEl), [300,300]).expandDims())
-          this.predictions = await this.model.predict(tf.image.resizeBilinear(tf.browser.fromPixels(imgEl), [300,300]).expandDims());
+          this.predictions = await this.model.predict([tf.image.resizeBilinear(tf.browser.fromPixels(imgEl), [300, 300]).expandDims().toFloat(), tf.image.resizeBilinear(tf.browser.fromPixels(imgEl2), [300, 300]).expandDims().toFloat()]);
+          console.log(this.predictions)
           
-          // this.predictions = await this.model.predict(tf.browser.fromPixels(imgEl, imgEl2));
         }, 0);
 
       };
     }
 
+
   }
+
+  
 
 
 }
