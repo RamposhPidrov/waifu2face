@@ -6,14 +6,14 @@ import { AppComponent } from './app.component';
 
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { ProfileComponent } from './profile/profile.component';
+import { ProfileComponent } from './persons/profile/profile.component';
 import { ModelUploadComponent } from './model-upload/model-upload.component';
 import { CreatePersonComponent } from './persons/create-person/create-person.component';
 import { PersonListComponent } from './persons/person-list/person-list.component';
 import { PersonDetailsComponent } from './persons/person-details/person-details.component';
 import { PersonsComponent } from './persons/persons.component';
 import { PersonService } from './persons/person.service';
-import { PersonDataService } from './shared/persondata.service';
+import { HeaderComponent } from './header/header.component';
 
 
 
@@ -26,7 +26,8 @@ import { PersonDataService } from './shared/persondata.service';
     CreatePersonComponent,
     PersonListComponent,
     PersonDetailsComponent,
-    PersonsComponent
+    PersonsComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +36,7 @@ import { PersonDataService } from './shared/persondata.service';
     FormsModule,
     HttpClientModule   
   ],
-  providers: [ PersonService, PersonDataService ],
+  providers: [ PersonService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -6,7 +6,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { PersonService } from '../person.service';
 import { Person } from '../person.model';
 import { DataStorageService } from '../../shared/data-storage.service';
-import { PersonDataService } from '../../shared/persondata.service';
 
 @Component({
   selector: 'person-list',
@@ -24,7 +23,6 @@ export class PersonListComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private dataStorageService: DataStorageService,
-    // private persondataService:PersonDataService
     ) {
 }
   async ngOnInit() {

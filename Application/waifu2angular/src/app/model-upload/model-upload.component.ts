@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, Output } from '@angular/core';
 import * as tf from '@tensorflow/tfjs';
-import { Prediction } from '../prediction';
+import { Prediction } from '../shared/prediction';
 import {loadGraphModel} from '@tensorflow/tfjs-converter';
-import { HardSwish, Relu6, Lambda } from '../custom_layers';
+import { HardSwish, Relu6, Lambda } from '../shared/custom_layers';
 import * as blazeface from '@tensorflow-models/blazeface'
 import { imag } from '@tensorflow/tfjs';
 
@@ -70,6 +70,7 @@ export class ModelUploadComponent implements OnInit {
     this.loading = false;
   }
 
+  
   async govno() {
     const predictions = await this.model_cropper.estimateFaces(document.getElementById('image'), false)
           console.log( predictions)

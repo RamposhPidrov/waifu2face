@@ -1,0 +1,58 @@
+<h1>Create new person</h1>
+<div>  
+
+
+  <!-- <div *ngIf="response && imageURL">
+    <img [src]='imageURL' style="max-width: 300px;" />
+  </div> -->
+
+ 
+
+<form (ngSubmit)="onSubmit()">
+  <label for="name">Name</label>
+  <input type="text" id="name" class="form-control" #nameInput>
+
+  <label for="name">Job code</label>
+  <input type="text" id="jobcode" class="form-control" #jobcodeInput>
+  <label for="name">Person image</label>
+  <img [src]="imgURL" height="200" *ngIf="imgURL" class="rounded mx-auto d-block mb-3">
+
+  <div class="input-group mb-3">
+    <div class="custom-file">
+      <input #file type="file" class="custom-file-input"  type="file" id="customFile" name="profile" accept='image/*' (change)="onChange($event, file.files)">
+      <label class="custom-file-label" for="customFile">Choose file</label>
+    </div>
+<!-- 
+    <div class="input-group-prepend">
+      <span class="input-group-text">Upload image</span>
+    </div>
+
+    <div class="custom-file">
+      <input #file type="file" class="custom-file-input" id="inputGroupFile03" name="profile" accept='image/*' (change)="onChange($event, file.files)">
+      <label class="custom-file-label" for="inputGroupFile01">{{imageURL}}</label>
+    </div> -->
+  </div>
+    <div class="row center">
+      <button class="btn btn-danger btn-lg btn-block" type="submit">Hit me senpai!</button>
+    </div>
+ 
+
+    <!-- <div class="input-group mb-3">
+    <div class="input-group-prepend">
+        <button class="btn btn-outline-secondary" type="submit">Upload to server</button>
+    </div>
+    <div class="custom-file">
+        <input type="file" class="custom-file-input" id="inputGroupFile03" name="profile" (change)="onChange($event)">
+        <label class="custom-file-label" for="inputGroupFile03">{{imageURL}}</label>
+    </div>
+    </div> -->
+</form>
+
+</div>
+
+
+
+
+
+
+
