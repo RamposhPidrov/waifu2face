@@ -38,6 +38,8 @@ export class DataStorageService {
         // convert the dates to a nice format
       for (let post of posts) {
         post.image = this.DJANGO_SERVER + post.image;
+        post.image_crop = this.DJANGO_SERVER + post.image_crop;
+
       }
       
       return persons;
