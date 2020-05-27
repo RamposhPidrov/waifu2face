@@ -25,6 +25,7 @@ tf.ENV.set('WEBGL_PACK', false);
 export class ModelUploadComponent implements OnInit, AfterContentInit  {
   imageSrc: string;
   @ViewChild('personimg') imageEl: ElementRef;
+  @ViewChild('person2img_uploaded') imageEl2: ElementRef;
 
   private model;
   private model_cropper;
