@@ -4,6 +4,7 @@ import { Person } from '../person.model';
  
 import { PersonListComponent } from '../person-list/person-list.component';
  
+//Elements inside persons list
 @Component({
   selector: 'person-details',
   templateUrl: './person-details.component.html',
@@ -12,12 +13,16 @@ import { PersonListComponent } from '../person-list/person-list.component';
 export class PersonDetailsComponent implements OnInit {
  
   @Input() person: Person;
-  @Input() index: number;
-
+  @Input() id: string;
+  @Input() index:number;
+  
   constructor(private personService: PersonService, private listComponent: PersonListComponent) { }
  
   ngOnInit() {
+    this.id=this.person.id;
   }
+
+
  
   // updateActive(isActive: boolean) {
   //   this.personService.updateperson(this.person.id,

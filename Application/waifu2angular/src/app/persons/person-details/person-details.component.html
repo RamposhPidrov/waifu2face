@@ -9,7 +9,8 @@
           <div class="card-block px-2">
               <h4 class="card-title">{{person.name}}</h4>
               <p class="card-text">{{person.jobcode}}</p>
-              <a href="#" class="btn btn-primary">BUTTON</a>
+                {{index}}
+              <button class="btn btn-primary" [routerLink]="[index]" routerLinkActive="active">Login</button>
           </div>
       </div>
   </div>

@@ -9,7 +9,7 @@ import { PersonService } from '../persons/person.service';
 
 @Injectable({ providedIn: 'root' })
 export class DataStorageService {
-  constructor(private http: HttpClient, private personService: PersonService, private uploadService: UploadService) {}
+  constructor(private http: HttpClient, private personService: PersonService) {}
   DJANGO_SERVER: string = "http://127.0.0.1:8000";
   error = new Subject<string>();
 
@@ -38,16 +38,69 @@ export class DataStorageService {
       const posts = persons;
         // convert the dates to a nice format
       for (let post of posts) {
+        post.index
         post.image = this.DJANGO_SERVER + post.image;
         post.image_crop = this.DJANGO_SERVER + post.image_crop;
       }
       return persons;
 
     })).subscribe((persons:Person[]) => {
-          
+          console.log('fetch2')
+          console.log(persons)
           this.personService.setpersons(persons);
     });
   }
+
+  get_person(id) {
+    return this.http.get<Person>(`${this.DJANGO_SERVER}/api/persons/one/${id}`).pipe(
+      map(person => {
+    
+        person.image = this.DJANGO_SERVER + person.image;
+        person.image_crop = this.DJANGO_SERVER + person.image_crop;
+        return person;
+      })
+
+    );
+  }
+
+//   persons:Person[];
+//   getAll() {
+//     return this.http
+//     .get<Person[]>(
+//       `${this.DJANGO_SERVER}/api/persons`
+//     )
+//     .pipe(
+//       map(persons => {
+    
+//         const posts = persons;
+//           // convert the dates to a nice format
+//         for (let post of posts) {
+//           post.index
+//           post.image = this.DJANGO_SERVER + post.image;
+//           post.image_crop = this.DJANGO_SERVER + post.image_crop;
+//         }
+//         return persons;
+  
+//       }))
+//   }
+// // person_one:Person;
+//   public getPersonByID(id){
+//     return this.http.get<Person>(
+//       `${this.DJANGO_SERVER}/api/persons/one/${id}`
+//     )
+//     // .subscribe((persons:Person) => {
+//     //   console.log(persons);
+//     //   // this.person_one=persons;
+//     //     return persons;
+//     //   });
+
+//     // return this.person_one
+//   }
+
+//   getNews(id: number) {
+//     return this.getAll().map((data: any) => data.data.data.find(news => news.id === id))
+//   }
+
 
   public upload(formData) {
     return this.http.post<any>(`${this.DJANGO_SERVER}/api/persons/`, formData);

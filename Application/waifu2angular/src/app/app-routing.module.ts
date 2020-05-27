@@ -13,6 +13,8 @@ const routes: Routes = [
   { path: '', redirectTo: 'person', pathMatch: 'full' },
   { path: 'person', component: PersonsComponent },
   { path: 'add', component: ProfileComponent },
+  { path: 'person/:id', component: ModelUploadComponent },
+
 ];
 
 

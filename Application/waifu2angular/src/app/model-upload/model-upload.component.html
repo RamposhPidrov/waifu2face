@@ -1,10 +1,17 @@
+
 <div class="cont d-flex justify-content-center align-items-center flex-column">
+  <h1> Login </h1>
+  <p><b>Name:</b> {{person.name}}</p>
+  <p><b>Job code:</b> {{person.jobcode}}</p>
+  <img src={{person.image_crop}} class="rounded mx-auto d-block mb-3" style="max-width: 300px;" #personimg>
+
 
   <div class="custom-file">
     <input type="file" class="custom-file-input" (change)="fileChangeEvent($event)">
     <label class="custom-file-label">Choose file</label>
   </div>
 
+  
   <div *ngIf="loading; else elseBlock">
     <img src="./assets/loading.gif">
   </div>
@@ -19,8 +26,6 @@
       {{prediction.className}} - {{prediction.probability}}
     </div> -->
   </div>
-
-
 </div>
 
 <canvas id="canvas" width="578" height="200"></canvas>

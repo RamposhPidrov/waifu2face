@@ -2,13 +2,20 @@ import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { UploadService } from '../../shared/upload.service';
 import { ReactiveFormsModule } from '@angular/forms'
-import { Router } from '@angular/router';
+import { Person } from '../person.model';
+import { PersonService } from '../person.service';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+
+//FOR CREATION
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent implements OnInit {
+  person: Person;
+  id: number;
+
   DJANGO_SERVER = 'http://127.0.0.1:8000'
   form: FormGroup;
   response;
@@ -17,14 +24,19 @@ export class ProfileComponent implements OnInit {
   public imagePath;
   imgURL: any;
   public message: string;
- 
+
   @ViewChild('nameInput', {static:false}) nameInputRef:ElementRef;
   @ViewChild('jobcodeInput', {static:false}) jobcodeInputRef:ElementRef;
-
   
-  constructor(private formBuilder: FormBuilder, private uploadService: UploadService, private router:Router) { }
+
+  constructor(private formBuilder: FormBuilder, private uploadService: UploadService,
+              private personService: PersonService,
+              private route: ActivatedRoute,
+              private router: Router) { }
 
   ngOnInit() {
+   
+
     this.form = this.formBuilder.group({
       profile: ['']
     });
@@ -35,23 +47,21 @@ export class ProfileComponent implements OnInit {
       const file = event.target.files[0];
       this.form.get('profile').setValue(file);
     }
-
-
     if (event.length === 0)
     return;
     var mimeType = files[0].type;
     if (mimeType.match(/image\/*/) == null) {
       this.message = "Only images are supported.";
       return;
-  }
+    }
 
-  var reader = new FileReader();
-  this.imagePath = files;
-  reader.readAsDataURL(files[0]); 
-  reader.onload = (_event) => { 
-    this.imgURL = reader.result; 
-  
-  }
+    var reader = new FileReader();
+    this.imagePath = files;
+    reader.readAsDataURL(files[0]); 
+    reader.onload = (_event) => { 
+      this.imgURL = reader.result; 
+    }
+
   }
  
   onSubmit() {

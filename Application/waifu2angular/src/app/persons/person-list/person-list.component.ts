@@ -33,9 +33,10 @@ export class PersonListComponent implements OnInit {
           this.persons = persons;
         }
       );
-    console.log(this.persons);
+    // console.log(this.persons);
 
     this.onFetchData();
+    
     // this.getPersons();
 
     // this.persons = this.personService.getpersons();

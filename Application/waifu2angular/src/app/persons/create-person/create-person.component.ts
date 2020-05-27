@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Person } from '../person.model';
 import { PersonService } from '../person.service';
  
+//not in use at all
 @Component({
   selector: 'create-person',
   templateUrl: './create-person.component.html',

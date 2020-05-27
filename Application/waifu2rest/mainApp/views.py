@@ -23,6 +23,12 @@ class FileUploadView(APIView):
       else:
           return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class OnePersonView(APIView):
+    def get(self, request, pk):
+        person = get_object_or_404(Person.objects.all(), pk=pk)
+        serializer = PersonSerializer(person, data=request.data)
+        if serializer.is_valid():
+            return Response(serializer.data)
 
 class PersonView(APIView):
     parser_class = (FileUploadParser,)
@@ -49,7 +55,6 @@ class PersonView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
     def delete(self, request, pk):
         # Get object with this pk

@@ -21,7 +21,13 @@ export class PersonService {
   }
 
   getperson(index: number) {
+    
     return this.persons[index];
+  }
+
+  getpersonbyID(id_person: string) {
+    
+    return this.persons.slice().filter(x => x.id == id_person)[0];
   }
 
   addperson(person: Person) {
