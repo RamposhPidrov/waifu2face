@@ -1,0 +1,18 @@
+
+<li class="list-group-item d-flex justify-content-between align-items-center">  
+  <div *ngIf="person">
+    <div class="row no-gutters">
+      <div class="col-auto">
+          <img src={{person.image_crop}} class="img-fluid" alt={{person.name}} style="max-width: 100px;">
+      </div>
+      <div class="col">
+          <div class="card-block px-2">
+              <h4 class="card-title">{{person.name}}</h4>
+              <p class="card-text">{{person.jobcode}}</p>
+                {{index}}
+              <button class="btn btn-primary" [routerLink]="[index]" routerLinkActive="active">Login</button>
+          </div>
+      </div>
+  </div>
+ </div>
+</li>

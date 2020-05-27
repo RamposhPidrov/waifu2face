@@ -1,10 +1,15 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, Output, OnChanges, AfterContentInit } from '@angular/core';
 import * as tf from '@tensorflow/tfjs';
-import { Prediction } from '../prediction';
+import { Prediction } from '../shared/prediction';
 import {loadGraphModel} from '@tensorflow/tfjs-converter';
-import { HardSwish, Relu6, Lambda } from '../custom_layers';
+import { HardSwish, Relu6, Lambda } from '../shared/custom_layers';
 import * as blazeface from '@tensorflow-models/blazeface'
 import { imag } from '@tensorflow/tfjs';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { PersonService } from '../persons/person.service';
+import { Person } from '../persons/person.model';
+import { DataStorageService } from '../shared/data-storage.service';
+import { Subscription } from 'rxjs';
 
 
 tf.serialization.registerClass(HardSwish);  // Needed for serialization.
@@ -17,28 +22,45 @@ tf.ENV.set('WEBGL_PACK', false);
   styleUrls: ['./model-upload.component.css']
 })
 
-export class ModelUploadComponent implements OnInit {
+export class ModelUploadComponent implements OnInit, AfterContentInit  {
   imageSrc: string;
-  @ViewChild('img') imageEl: ElementRef;
+  @ViewChild('personimg') imageEl: ElementRef;
 
   private model;
   private model_cropper;
   private trashhold_cropper = 0.95;
   predictions: tf.Tensor[];
   cropper: tf.Tensor;
- 
   
   DJANGO_SERVER = 'http://127.0.0.1:8000'
   loading: boolean;
 
+  person: Person = new Person(0,"","","","","");
+  id: string;
+  subscription: Subscription;
+  persons;
 
-  constructor() {
-    
-    
-   }
+  constructor( private personService: PersonService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private dataStorageService: DataStorageService,
+    ) {
+  }
+  
+  ngAfterContentInit()	{
+    this.getPerson(this.route.snapshot.paramMap.get('id'));
+
+  }
 
 
   async ngOnInit() {
+    this.route.params
+    .subscribe(
+      (params: Params) => {
+        this.id = params['id'];
+      }
+    );
+      
 
     this.loading = true;
     console.log('loading model...');
@@ -71,6 +93,20 @@ export class ModelUploadComponent implements OnInit {
     this.loading = false;
   }
 
+  getPerson(id) {
+    console.log('getPerson called');
+    this.dataStorageService.get_person(id)
+      .subscribe(
+        data => {
+          this.person = data;
+          console.log(data);
+        },
+        error => {
+          console.log(error);
+        });
+  }
+
+  
   async govno() {
     const predictions = await this.model_cropper.estimateFaces(document.getElementById('image'), false)
           console.log( predictions)
@@ -136,7 +172,7 @@ export class ModelUploadComponent implements OnInit {
 
           console.log(imgEl);
           const imgEl2 = this.imageEl.nativeElement;
-          
+          // const imgEl2 = this.person.image_crop;
           
           this.predictions = await this.model.predict([tf.image.resizeBilinear(tf.browser.fromPixels(imgEl), [300, 300]).expandDims().toFloat(), tf.image.resizeBilinear(tf.browser.fromPixels(imgEl2), [300, 300]).expandDims().toFloat()]);
           console.log(this.predictions)
@@ -153,4 +189,33 @@ export class ModelUploadComponent implements OnInit {
 
 
 }
+
+
+  // canvas: HTMLCanvasElement;
+  // context: CanvasRenderingContext2D;
+
+  // cropCal(){
+  //   let canvas = document.getElementById('canvas') as HTMLCanvasElement;
+  //   let context = canvas.getContext("2d");
+  //   var imageObj = new Image();
+
+  //   imageObj.onload = function() {
+  //     // draw cropped image
+  //     var sourceX = 150;
+  //     var sourceY = 0;
+  //     var sourceWidth = 150;
+  //     var sourceHeight = 150;
+  //     var destWidth = sourceWidth;
+  //     var destHeight = sourceHeight;
+  //     var destX = canvas.width / 2 - destWidth / 2;
+  //     var destY = canvas.height / 2 - destHeight / 2;
+
+  //     context.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+  //   };
+  //   imageObj.src = 'http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg';   
+
+  //   this.canvas = canvas;
+  //   this.context = context;
+
+  // }
 
