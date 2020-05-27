@@ -152,6 +152,7 @@ def draw_bounding_box_on_image(image,
   if use_normalized_coordinates:
     (left, right, top, bottom) = (xmin * im_width, xmax * im_width,
                                   ymin * im_height, ymax * im_height)
+    print((left, right, top, bottom), image.size)
   else:
     (left, right, top, bottom) = (xmin, xmax, ymin, ymax)
   draw.line([(left, top), (left, bottom), (right, bottom),
@@ -397,37 +398,30 @@ def visualize_boxes_and_labels_on_image_array(image,
           box_to_color_map[box] = STANDARD_COLORS[
               classes[i] % len(STANDARD_COLORS)]
 
-  get_some_help = []
-  im_width, im_height = Image.fromarray(image).size
+  # Draw all boxes onto image.
   for box, color in box_to_color_map.items():
-    get_some_help.append([int(i) for i in [box[0] * im_width, box[1] * im_width, box[2] * im_height, box[3] * im_height]])
-  return get_some_help
-    # print(box)
-    # ymin, xmin, ymax, xmax = box
-    # if instance_masks is not None:
-    #   draw_mask_on_image_array(
-    #       image,
-    #       box_to_instance_masks_map[box],
-    #       color=color
-    #   )
-    # draw_bounding_box_on_image_array(
-    #     image,
-    #     ymin,
-    #     xmin,
-    #     ymax,
-    #     xmax,
-    #     color=color,
-    #     thickness=line_thickness,
-    #     display_str_list=box_to_display_str_map[box],
-    #     use_normalized_coordinates=use_normalized_coordinates)
-    # if keypoints is not None:
-    #   draw_keypoints_on_image_array(
-    #       image,
-    #       box_to_keypoints_map[box],
-    #       color=color,
-    #       radius=line_thickness / 2,
-    #       use_normalized_coordinates=use_normalized_coordinates)
-
-
-
-
+    color = 'Violet'
+    ymin, xmin, ymax, xmax = box
+    if instance_masks is not None:
+      draw_mask_on_image_array(
+          image,
+          box_to_instance_masks_map[box],
+          color=color
+      )
+    draw_bounding_box_on_image_array(
+        image,
+        ymin,
+        xmin,
+        ymax,
+        xmax,
+        color=color,
+        thickness=line_thickness,
+        display_str_list=box_to_display_str_map[box],
+        use_normalized_coordinates=use_normalized_coordinates)
+    if keypoints is not None:
+      draw_keypoints_on_image_array(
+          image,
+          box_to_keypoints_map[box],
+          color=color,
+          radius=line_thickness / 2,
+          use_normalized_coordinates=use_normalized_coordinates)
