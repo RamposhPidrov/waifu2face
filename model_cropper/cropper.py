@@ -13,9 +13,10 @@ import tqdm
 sys.path.append("..")
 
 from utils import label_map_util
+from utils import visualization_utils_color as vis_util
 
 
-PATH_TO_CKPT = './model/cal.pb'
+PATH_TO_CKPT = './model/frozen_inference_graph_face.pb'
 
 PATH_TO_LABELS = './protos/face_label_map.pbtxt'
 
@@ -36,7 +37,8 @@ def get_boxes(image,boxes,scores,min_score_thresh=.7):
   for i in range(0, len(boxes)):
     box = boxes[i]
     if scores[i] > min_score_thresh:
-      get_some_help.append([int(i) for i in [box[0] * im_width, box[1] * im_width, box[2] * im_height, box[3] * im_height]])
+    #   print(box)
+      get_some_help.append([int(i) for i in [box[0] * im_height, box[1] * im_width, box[2] * im_height, box[3] * im_width]])
   return get_some_help
 
 
@@ -70,8 +72,8 @@ def cropper_numpy_run(image):
 
 
             (boxes, scores, classes, num_detections) = sess.run([boxes, scores, classes, num_detections],feed_dict={image_tensor: image_np_expanded})
-
-            box = get_boxes(image, np.squeeze(boxes), np.squeeze(scores), min_score_thresh=.95)
+            
+            box = get_boxes(image, np.squeeze(boxes), np.squeeze(scores), min_score_thresh=.01)
             return box
         
 
@@ -110,30 +112,74 @@ def cropper_path_run(image):
             # saver.save(sess, 'checkpoint1.chpt')
 
             (boxes, scores, classes, num_detections) = sess.run([boxes, scores, classes, num_detections],feed_dict={image_tensor: image_np_expanded})
-            # print([n.name for n in tf.compat.v1.get_default_graph().as_graph_def().node])
-            box = scores
+            vis_util.visualize_boxes_and_labels_on_image_array(
+        #  image_np,
+            image_np,
+            np.squeeze(boxes),
+            np.squeeze(classes).astype(np.int32),
+            np.squeeze(scores),
+            category_index,
+            use_normalized_coordinates=True,
+            line_thickness=4)
+            imgplot = plt.imshow(image_np)
+            plt.show()
+            box = get_boxes(image, np.squeeze(boxes), np.squeeze(scores), min_score_thresh=.01)
 
             
             return box
 
 
-# class RestoreCkptCallback(keras.callbacks.Callback):
-#     def __init__(self, pretrained_file):
-#         self.pretrained_file = pretrained_file
-#         self.sess = keras.backend.get_session()
-#         self.saver = tf.train.Saver()
-#     def on_train_begin(self, logs=None):
-#         if self.pretrian_model_path:
-#             self.saver.restore(self.sess, self.pretrian_model_path)
-#             print('load weights: OK.')
+from PIL import Image
 
-# model.compile(loss='categorical_crossentropy', optimizer='rmsprop')
-# restore_ckpt_callback = RestoreCkptCallback(pretrian_model_path=PATH_TO_CKPT) 
-# model.fit(x_train, y_train, batch_size=128, epochs=20, callbacks=[restore_ckpt_callback])
-box = cropper_path_run('000_10_image.png')
-print(box)
+from os import listdir
+from os.path import isfile, join
+
+import numpy as np
 
 
-# protobuf_to_checkpoint_conversion(PATH_TO_CKPT,'.\\chk')
-# tf.keras.models.model_from_config('pipeline.config')
+w = [500000, 2]
 
+
+dird = '..\\images\\train\\'
+onlyfiles = [f for f in listdir('..\\images\\train\\') if isfile(join('..\\images\\train\\', f))]
+for i in ['016_10_image.png',"016_07_image.png","016_08_image.png","017_10_image.png"]:#onlyfiles[450:]:
+
+    img = Image.open(dird + i)
+    # if (img.size[0] == 1920):
+    #     print()
+    #     img = img.crop((500,0,500+700,img.size[1]))
+    img1 = np.uint8(img)
+    box = cropper_path_run(dird + i)
+    # box.sort(key=lambda x: np.linalg.norm(np.array([1920/2, 1080/2]) - np.array([x[1]+(x[1]-x[3])/2, np.interp(x[1]+(x[1]-x[3])/2, [x[1], x[3]], [x[0], x[2]])])), reverse=True)
+    print(i)
+    # for x in box:
+        # print((1/abs(x[1]+(x[3]-x[1])/2-img.size[0]/2))*w[0]/abs((x[3] - x[1])*(x[2] - x[0]))*w[1])
+    print(len(box))
+
+    box.sort(key=lambda x: (abs(x[1]+(x[3]-x[1])/2-img.size[0]/2))*w[0], reverse=True)
+    box = box[:3]
+    box.sort(key=lambda x:abs((x[3] - x[1])*(x[2] - x[0]))*w[1], reverse=True)
+    
+    
+    
+   
+    
+    for x in box[:1]:
+        left_x = x[1] - 15
+        left_y = x[0] - 15
+        img.crop((left_x,left_y,x[3] + 15,x[2] + 15)).save(dird + '..\\croped\\{}'.format(i))
+
+
+# '016_10_image.png',"016_07_image.png","016_08_image.png","017_10_image.png","019_06_image.png"
+
+
+
+# print(box)
+
+
+# img = Image.open('000_10_image.png')
+# img = np.uint8(img)
+# box = cropper_numpy_run(img)
+# for x in box:
+#     print(x)
+#     print()

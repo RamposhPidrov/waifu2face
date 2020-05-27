@@ -86,7 +86,7 @@ export class Lambda extends tf.layers.Layer {
     return tf.tidy(() => {  
       console.log(input[0].dataSync())
       console.log(tf.squaredDifference(input[0], input[1]).dataSync())
-      return input;
+      return tf.squaredDifference(input[0], input[1]);
       //return tf.sigmoid(x.mul(this.alpha)).mul(x);
     });
   }

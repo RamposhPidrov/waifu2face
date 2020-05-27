@@ -150,7 +150,7 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
           var imageObj = new Image();
           const start = predictions[0].topLeft;
           const end = predictions[0].bottomRight;
-          const size = [(end[0] - start[0]) * 0.85, end[1] - start[1]* 0.85];
+          const size = [(end[0] - start[0]) , end[1] - start[1]];
           console.log(size);
           canvas.height = size[1] 
           canvas.width = size[0]
