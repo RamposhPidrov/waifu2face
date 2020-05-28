@@ -136,9 +136,10 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
         this.imageSrc = res.target.result;
         setTimeout(async () => {
           const imgEl = this.imageEl.nativeElement;
+          console.log(imgEl.sourceHeight)
           // this.cropper = await this.model_cropper.executeAsync((tf.browser.fromPixels(imgEl).expandDims()))
           const predictions = await this.model_cropper.estimateFaces(document.getElementById('image'), false)
-          console.log(predictions[0].topLeft);
+          console.log(predictions);
           
 
           var img = document.getElementsByClassName('cont')[0];
