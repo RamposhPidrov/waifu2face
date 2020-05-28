@@ -26,6 +26,8 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
   imageSrc: string;
   @ViewChild('personimg') imageEl: ElementRef;
   @ViewChild('person2img_uploaded') imageEl2: ElementRef;
+  @ViewChild('cropped_canvas') imageCroppedCanvas: ElementRef;
+
 
   private model;
   private model_cropper;
@@ -37,7 +39,7 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
   loading: boolean;
 
   person: Person = new Person(0,"","","","","");
-  id: string;
+  // id: string;
   subscription: Subscription;
   persons;
 
@@ -50,19 +52,15 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
   
   ngAfterContentInit()	{
     this.getPerson(this.route.snapshot.paramMap.get('id'));
-
   }
 
 
   async ngOnInit() {
-    this.route.params
-    .subscribe(
-      (params: Params) => {
-        this.id = params['id'];
-      }
-    );
-      
+    this.loadModels();
+  }
 
+  // loads siamese model and cropper model
+  async loadModels(){ 
     this.loading = true;
     console.log('loading model...');
     
@@ -92,22 +90,9 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
     console.log(this.model)
 
     this.loading = false;
-  }
+  }  
 
-  getPerson(id) {
-    console.log('getPerson called');
-    this.dataStorageService.get_person(id)
-      .subscribe(
-        data => {
-          this.person = data;
-          console.log(data);
-        },
-        error => {
-          console.log(error);
-        });
-  }
 
-  
   async govno() {
     const predictions = await this.model_cropper.estimateFaces(document.getElementById('image'), false)
           console.log( predictions)
@@ -125,7 +110,7 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
           }
   }
 
-
+  //when file uploaded
   async fileChangeEvent(event) {
     if (event.target.files && event.target.files[0]) {
       const reader = new FileReader();
@@ -135,15 +120,20 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
       reader.onload = (res: any) => {
         this.imageSrc = res.target.result;
         setTimeout(async () => {
+          const imgEl2 = this.imageEl2.nativeElement;
           const imgEl = this.imageEl.nativeElement;
+
+        
           // this.cropper = await this.model_cropper.executeAsync((tf.browser.fromPixels(imgEl).expandDims()))
-          const predictions = await this.model_cropper.estimateFaces(document.getElementById('image'), false)
+          // const predictions = await this.model_cropper.estimateFaces(document.getElementById('image'), false)
+          const predictions = await this.model_cropper.estimateFaces(this.imageEl2.nativeElement, false)
           console.log(predictions[0].topLeft);
           
 
           var img = document.getElementsByClassName('cont')[0];
-          var canvas = document.createElement('canvas');
-          canvas.id = "mycanvas";
+          var canvas = this.imageCroppedCanvas.nativeElement; //document.createElement('canvas');
+          //canvas.id = "mycanvas";
+          
           
           img.appendChild(canvas);
           var context = canvas.getContext('2d');
@@ -168,11 +158,10 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
 
             context.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
           };
-          imageObj.src = imgEl.src
+          imageObj.src = imgEl2.src
 
 
-          console.log(imgEl);
-          const imgEl2 = this.imageEl.nativeElement;
+          console.log(imgEl2);
           // const imgEl2 = this.person.image_crop;
           
           this.predictions = await this.model.predict([tf.image.resizeBilinear(tf.browser.fromPixels(imgEl), [300, 300]).expandDims().toFloat(), tf.image.resizeBilinear(tf.browser.fromPixels(imgEl2), [300, 300]).expandDims().toFloat()]);
@@ -186,6 +175,19 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
 
   }
 
+  //http get person by id in url
+  getPerson(id) {
+    console.log('getPerson called');
+    this.dataStorageService.get_person(id)
+      .subscribe(
+        data => {
+          this.person = data;
+          console.log(data);
+        },
+        error => {
+          console.log(error);
+        });
+  }
   
 
 
