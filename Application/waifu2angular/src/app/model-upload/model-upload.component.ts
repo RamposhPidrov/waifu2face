@@ -126,7 +126,7 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
         
           // this.cropper = await this.model_cropper.executeAsync((tf.browser.fromPixels(imgEl).expandDims()))
           // const predictions = await this.model_cropper.estimateFaces(document.getElementById('image'), false)
-          const predictions = await this.model_cropper.estimateFaces(res.target.result, false)
+          const predictions = await this.model_cropper.estimateFaces((this.imageEl2.nativeElement), false)
           console.log(predictions);
           
 
@@ -140,7 +140,7 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
           var imageObj = new Image();
           const start = predictions[0].topLeft;
           const end = predictions[0].bottomRight;
-          const size = [(end[0] - start[0]) * 6 , (end[1] - start[1]) * 6];
+          const size = [(end[0] - start[0]) * 1.25 , (end[1] - start[1]) * 1.25];
           console.log(size);
           canvas.height = size[1] 
           canvas.width = size[0]
@@ -158,13 +158,13 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
 
             context.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
           };
-          imageObj.src = this.imageEl.nativeElement.src
+          imageObj.src = this.imageEl2.nativeElement.src
 
 
           console.log(imgEl2);
           // const imgEl2 = this.person.image_crop;
           
-          this.predictions = await this.model.predict([tf.image.resizeBilinear(tf.browser.fromPixels(imgEl), [300, 300]).expandDims().toFloat(), tf.image.resizeBilinear(tf.browser.fromPixels(imgEl2), [300, 300]).expandDims().toFloat()]);
+          this.predictions = await this.model.predict([tf.image.resizeBilinear(tf.browser.fromPixels(imgEl), [300, 300]).expandDims().toFloat(), tf.image.resizeBilinear(tf.browser.fromPixels(imgEl), [300, 300]).expandDims().toFloat()]);
           console.log(this.predictions)
           
         }, 0);
