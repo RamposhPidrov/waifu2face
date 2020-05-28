@@ -126,8 +126,8 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
         
           // this.cropper = await this.model_cropper.executeAsync((tf.browser.fromPixels(imgEl).expandDims()))
           // const predictions = await this.model_cropper.estimateFaces(document.getElementById('image'), false)
-          const predictions = await this.model_cropper.estimateFaces(this.imageEl2.nativeElement, false)
-          console.log(predictions[0].topLeft);
+          const predictions = await this.model_cropper.estimateFaces(res.target.result, false)
+          console.log(predictions);
           
 
           var img = document.getElementsByClassName('cont')[0];
@@ -140,7 +140,7 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
           var imageObj = new Image();
           const start = predictions[0].topLeft;
           const end = predictions[0].bottomRight;
-          const size = [(end[0] - start[0]) , end[1] - start[1]];
+          const size = [(end[0] - start[0]) * 6 , (end[1] - start[1]) * 6];
           console.log(size);
           canvas.height = size[1] 
           canvas.width = size[0]
@@ -158,7 +158,7 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
 
             context.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
           };
-          imageObj.src = imgEl2.src
+          imageObj.src = this.imageEl.nativeElement.src
 
 
           console.log(imgEl2);
