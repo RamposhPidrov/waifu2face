@@ -76,14 +76,6 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
 
     // console.log(this.model.summary());
 
-    const NonMaxSuppression = (node) =>
-      tf.image.nonMaxSuppression(
-        node.inputs[0], node.inputs[1],
-        node.attrs['iouThreshold']);
-     
-    
-
-    tf.registerOp("NonMaxSuppression", NonMaxSuppression);
     
 
     console.log('Sucessfully loaded model');
@@ -161,10 +153,10 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
           imageObj.src = this.imageEl2.nativeElement.src
 
 
-          console.log(imgEl2);
+          console.log(tf.browser.fromPixels(this.imageEl2.nativeElement));
           // const imgEl2 = this.person.image_crop;
           
-          this.predictions = await this.model.predict([tf.image.resizeBilinear(tf.browser.fromPixels(imgEl), [300, 300]).expandDims().toFloat(), tf.image.resizeBilinear(tf.browser.fromPixels(imgEl), [300, 300]).expandDims().toFloat()]);
+          this.predictions = await this.model.predict([tf.image.resizeBilinear(tf.browser.fromPixels(this.imageEl2.nativeElement), [300, 300]).expandDims().toFloat(), tf.image.resizeBilinear(tf.browser.fromPixels(this.imageCroppedCanvas.nativeElement), [300, 300]).expandDims().toFloat()]);
           console.log(this.predictions)
           
         }, 0);
