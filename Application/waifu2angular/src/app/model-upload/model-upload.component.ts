@@ -24,9 +24,11 @@ tf.ENV.set('WEBGL_PACK', false);
 
 export class ModelUploadComponent implements OnInit, AfterContentInit  {
   imageSrc: string;
-  @ViewChild('personimg') imageEl: ElementRef;
-  @ViewChild('person2img_uploaded') imageEl2: ElementRef;
-  @ViewChild('cropped_canvas') imageCroppedCanvas: ElementRef;
+  @ViewChild('personimg') imageEl: ElementRef; // img from db
+  // @ViewChild('imageEl_canvas') imageEl_canvas: ElementRef; //duplicate from db but canvas
+
+  @ViewChild('person2img_uploaded') imageEl2: ElementRef; //uploaded image
+  @ViewChild('cropped_canvas') imageCroppedCanvas: ElementRef; //cropped
 
 
   private model;
@@ -52,11 +54,26 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
   
   ngAfterContentInit()	{
     this.getPerson(this.route.snapshot.paramMap.get('id'));
+    
+
+    // var img = document.getElementsByClassName('cont')[0];
+    // var canvas = this.imageCroppedCanvas.nativeElement; //document.createElement('canvas');
+    // var canvas = document.getElementById('img1canvas');
+    // var canvas = document.createElement('canvas');
+
+    //canvas.id = "mycanvas";
+    // var context = canvas.getContext('2d');    
+    // img.appendChild(canvas);
+    // context.drawImage(this.imageEl);
+
+  
+
   }
 
 
   async ngOnInit() {
     this.loadModels();
+
   }
 
   // loads siamese model and cropper model
@@ -82,29 +99,27 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
     console.log(this.model)
 
     this.loading = false;
+
   }  
 
 
-  async govno() {
-    const predictions = await this.model_cropper.estimateFaces(document.getElementById('image'), false)
-          console.log( predictions)
 
-          
-          if (predictions.length > 0) {
-            for (let i = 0; i < predictions.length; i++) {
-              const start = predictions[i].topLeft;
-              const end = predictions[i].bottomRight;
-              const size = [end[0] - start[0], end[1] - start[1]];
-              console.log(start, end, size)
-              // // Render a rectangle over each detected face.
-              // ctx.fillRect(start[0], start[1], size[0], size[1]);
-            }
-          }
-  }
 
   //when file uploaded
   async fileChangeEvent(event) {
     if (event.target.files && event.target.files[0]) {
+      //canvas for image 1
+      // var canvas = this.imageEl_canvas.nativeElement; //document.createElement('canvas');
+      // canvas.height = this.imageEl.nativeElement.offsetHeight;
+      // canvas.width = this.imageEl.nativeElement.offsetWidth;
+      // var context = canvas.getContext('2d');
+      // console.log(context)
+      // context.drawImage(this.imageEl.nativeElement,0,0);
+      // this.imageEl_canvas.nativeElement
+      // end of canvas for image 1
+
+
+
       const reader = new FileReader();
 
       reader.readAsDataURL(event.target.files[0]);
@@ -112,8 +127,8 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
       reader.onload = (res: any) => {
         this.imageSrc = res.target.result;
         setTimeout(async () => {
-          const imgEl2 = this.imageEl2.nativeElement;
-          const imgEl = this.imageEl.nativeElement;
+          // const imgEl2 = this.imageEl2.nativeElement;
+          // const imgEl = this.imageEl.nativeElement;
 
         
           // this.cropper = await this.model_cropper.executeAsync((tf.browser.fromPixels(imgEl).expandDims()))
@@ -128,6 +143,8 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
           
           
           img.appendChild(canvas);
+          
+
           var context = canvas.getContext('2d');
           var imageObj = new Image();
           const start = predictions[0].topLeft;
@@ -153,10 +170,12 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
           imageObj.src = this.imageEl2.nativeElement.src
 
 
-          console.log(tf.browser.fromPixels(this.imageEl2.nativeElement));
+          // console.log(imgEl2);
           // const imgEl2 = this.person.image_crop;
-          
-          this.predictions = await this.model.predict([tf.image.resizeBilinear(tf.browser.fromPixels(this.imageEl2.nativeElement), [300, 300]).expandDims().toFloat(), tf.image.resizeBilinear(tf.browser.fromPixels(this.imageCroppedCanvas.nativeElement), [300, 300]).expandDims().toFloat()]);
+          console.log('mda');
+          console.log(this.imageEl.nativeElement);
+          console.log(this.imageCroppedCanvas.nativeElement);
+          this.predictions = await this.model.predict([tf.image.resizeBilinear(tf.browser.fromPixels(this.imageEl.nativeElement), [300, 300]).expandDims().toFloat(), tf.image.resizeBilinear(tf.browser.fromPixels(this.imageCroppedCanvas.nativeElement), [300, 300]).expandDims().toFloat()]);
           console.log(this.predictions)
           
         }, 0);
@@ -185,7 +204,22 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
 
 }
 
+// async govno() {
+//   const predictions = await this.model_cropper.estimateFaces(document.getElementById('image'), false)
+//         console.log( predictions)
 
+        
+//         if (predictions.length > 0) {
+//           for (let i = 0; i < predictions.length; i++) {
+//             const start = predictions[i].topLeft;
+//             const end = predictions[i].bottomRight;
+//             const size = [end[0] - start[0], end[1] - start[1]];
+//             console.log(start, end, size)
+//             // // Render a rectangle over each detected face.
+//             // ctx.fillRect(start[0], start[1], size[0], size[1]);
+//           }
+//         }
+// }
   // canvas: HTMLCanvasElement;
   // context: CanvasRenderingContext2D;
 
