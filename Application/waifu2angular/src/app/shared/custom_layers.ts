@@ -101,7 +101,7 @@ export class Lambda extends tf.layers.Layer {
       console.log(tf.abs(tf.sub(x, y)).dtype)
       // return tf.abs(tf.sub(x, y).cast('float32')).dataSync();
       // return tf.squaredDifference(input[0], input[1]);
-      return tf.abs(tf.sub(x, y));
+      return tf.sum(tf.abs(tf.sub(x, y)));
     });
   }
 

@@ -13,6 +13,7 @@ import { PersonDetailsComponent } from './persons/person-details/person-details.
 import { PersonsComponent } from './persons/persons.component';
 import { PersonService } from './persons/person.service';
 import { HeaderComponent } from './header/header.component';
+import { ModelWebcamComponent } from './model-webcam/model-webcam.component';
 
 
 
@@ -25,7 +26,8 @@ import { HeaderComponent } from './header/header.component';
     PersonListComponent,
     PersonDetailsComponent,
     PersonsComponent,
-    HeaderComponent
+    HeaderComponent,
+    ModelWebcamComponent
   ],
   imports: [
     BrowserModule,

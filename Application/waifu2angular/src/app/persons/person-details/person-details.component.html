@@ -10,7 +10,9 @@
               <h4 class="card-title">{{person.name}}</h4>
               <p class="card-text">{{person.jobcode}}</p>
 
-              <button class="btn btn-primary" [routerLink]="[index]" routerLinkActive="active">Login</button>
+              <button class="btn btn-info" routerLink="upload/{{person.id}}" routerLinkActive="active">Login with upload</button> |
+              <button class="btn btn-warning" routerLink="webcam/{{person.id}}" routerLinkActive="active">Login with webcam</button>
+
           </div>
       </div>
   </div>

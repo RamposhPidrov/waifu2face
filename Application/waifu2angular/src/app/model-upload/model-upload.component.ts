@@ -37,7 +37,7 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
   predictions: tf.Tensor;
   cropper: tf.Tensor;
   
-  DJANGO_SERVER = 'http://127.0.0.1:8000'
+  DJANGO_SERVER = 'http://192.168.1.113:8000'
   loading: boolean;
 
   person: Person = new Person(0,"","","","","");
@@ -117,8 +117,6 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
       // context.drawImage(this.imageEl.nativeElement,0,0);
       // this.imageEl_canvas.nativeElement
       // end of canvas for image 1
-
-
 
       const reader = new FileReader();
 

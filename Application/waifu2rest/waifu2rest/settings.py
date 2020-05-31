@@ -35,6 +35,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'sslserver',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -156,5 +157,8 @@ CORS_ORIGIN_ALLOW_ALL =  True
 CORS_ORIGIN_WHITELIST = (
 "http://127.0.0.1:4200",
 "http://localhost:4200",
+"http://192.168.1.113:4200"
 )
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
