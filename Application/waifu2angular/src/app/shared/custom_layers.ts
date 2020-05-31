@@ -17,7 +17,8 @@ export class HardSwish extends tf.layers.Layer {
   call(input) {
     return tf.tidy(() => {
      
-      let x = input.toFloat(); 
+      let x = input.cast('float32'); 
+
       return tf.mul(x, tf.relu6(x.add(3.0))).div(6.0);
       //return tf.sigmoid(x.mul(this.alpha)).mul(x);
     });
@@ -54,7 +55,7 @@ export class Relu6 extends tf.layers.Layer {
 
   call(input) {
     return tf.tidy(() => {
-      const x = input.toFloat(); //tf.getExactlyOneTensor(input);
+      const x = input.cast('float32');
       return tf.relu6(x);
       //return tf.sigmoid(x.mul(this.alpha)).mul(x);
     });
@@ -78,16 +79,29 @@ export class Relu6 extends tf.layers.Layer {
 
 
 export class Lambda extends tf.layers.Layer {
+
+  alpha:any;
+
   constructor() {
     super({})
   }
 
+
+  computeOutputShape(inputShape) {
+    console.log(inputShape)
+    return [1, 100]
+  }
+
   call(input) {
     return tf.tidy(() => {  
-      console.log(input[0].dataSync())
-      console.log(tf.squaredDifference(input[0], input[1]).dataSync())
-      return tf.squaredDifference(input[0], input[1]);
-      //return tf.sigmoid(x.mul(this.alpha)).mul(x);
+      let x = input[0].cast('float32')
+      let y = input[1].cast('float32')
+      // let da = tf.sum(tf.square(tf.sub(input[0], input[1])), 1, true)
+      // console.log(tf.sqrt(tf.maximum(da, 0.0000001)))
+      console.log(tf.abs(tf.sub(x, y)).dtype)
+      // return tf.abs(tf.sub(x, y).cast('float32')).dataSync();
+      // return tf.squaredDifference(input[0], input[1]);
+      return tf.abs(tf.sub(x, y));
     });
   }
 
