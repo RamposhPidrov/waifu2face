@@ -51,8 +51,8 @@ export class ModelWebcamComponent implements OnInit, AfterViewInit {
   async ngOnInit() {
     // this.loadModels();
     console.log('loading mobilenet model...');
-    // this.model = await tf.loadLayersModel(this.DJANGO_SERVER + '/media/waifu2face/model.json')
-    this.model = await mobilenet.load();
+    this.model = await tf.loadLayersModel(this.DJANGO_SERVER + '/media/waifu2face/model.json')
+    // this.model = await mobilenet.load();
 
     console.log('Sucessfully loaded model');
     this.loading = false;
