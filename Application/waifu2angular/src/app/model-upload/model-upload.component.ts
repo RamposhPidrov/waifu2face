@@ -34,7 +34,7 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
   private model;
   private model_cropper;
   private trashhold_cropper = 0.95;
-  predictions: tf.Tensor[];
+  predictions: tf.Tensor;
   cropper: tf.Tensor;
   
   DJANGO_SERVER = 'http://127.0.0.1:8000'
@@ -89,9 +89,9 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
    //this.model = await tf.loadLayersModel(this.DJANGO_SERVER + '/media/model.json')
     
     console.log(this.model_cropper);
-    this.model = await tf.loadLayersModel(this.DJANGO_SERVER + '/media/model.json')
+    this.model = await tf.loadLayersModel(this.DJANGO_SERVER + '/media/waifu2face/model.json')
 
-    // console.log(this.model.summary());
+    console.log(this.model.summary());
 
     
 
@@ -133,13 +133,14 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
         
           // this.cropper = await this.model_cropper.executeAsync((tf.browser.fromPixels(imgEl).expandDims()))
           // const predictions = await this.model_cropper.estimateFaces(document.getElementById('image'), false)
+          
           const predictions = await this.model_cropper.estimateFaces((this.imageEl2.nativeElement), false)
           console.log(predictions);
           
 
           var img = document.getElementsByClassName('cont')[0];
-          var canvas = this.imageCroppedCanvas.nativeElement; //document.createElement('canvas');
-          //canvas.id = "mycanvas";
+          var canvas = this.imageCroppedCanvas.nativeElement; 
+
           
           
           img.appendChild(canvas);
@@ -155,7 +156,6 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
           canvas.width = size[0]
 
           imageObj.onload = function() {
-            // draw cropped image
             var sourceX = start[0];
             var sourceY = start[1];
             var sourceWidth = size[1];
@@ -170,13 +170,12 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
           imageObj.src = this.imageEl2.nativeElement.src
 
 
-          // console.log(imgEl2);
-          // const imgEl2 = this.person.image_crop;
           console.log('mda');
           console.log(this.imageEl.nativeElement);
           console.log(this.imageCroppedCanvas.nativeElement);
-          this.predictions = await this.model.predict([tf.image.resizeBilinear(tf.browser.fromPixels(this.imageEl.nativeElement), [300, 300]).expandDims().toFloat(), tf.image.resizeBilinear(tf.browser.fromPixels(this.imageCroppedCanvas.nativeElement), [300, 300]).expandDims().toFloat()]);
-          console.log(this.predictions)
+          console.log([tf.browser.fromPixels(this.imageEl.nativeElement).cast('float32').expandDims(), tf.browser.fromPixels(this.imageEl.nativeElement).cast('float32').expandDims()])
+          this.predictions = this.model.predict([tf.browser.fromPixels(this.imageEl.nativeElement).expandDims(), tf.browser.fromPixels(this.imageEl.nativeElement).expandDims()]);
+          console.log(this.predictions.dataSync())
           
         }, 0);
 
