@@ -81,9 +81,9 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
     this.loading = true;
     console.log('loading model...');
     
-    const MODEL_URL = this.DJANGO_SERVER + '/media/cropper_model2/model.json';
-    const cal = await loadGraphModel(MODEL_URL);
-    this.model_cropper = cal
+    // const MODEL_URL = this.DJANGO_SERVER + '/media/cropper_model2/model.json';
+    // const cal = await loadGraphModel(MODEL_URL);
+    // this.model_cropper = cal
     console.log(this.model_cropper);
     this.model_cropper = await blazeface.load();
    //this.model = await tf.loadLayersModel(this.DJANGO_SERVER + '/media/model.json')
@@ -135,55 +135,48 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
       reader.onload = (res: any) => {
         this.imageSrc = res.target.result;
         setTimeout(async () => {
-          // const imgEl2 = this.imageEl2.nativeElement;
-          // const imgEl = this.imageEl.nativeElement;
-
-        
-          // this.cropper = await this.model_cropper.executeAsync((tf.browser.fromPixels(imgEl).expandDims()))
-          // const predictions = await this.model_cropper.estimateFaces(document.getElementById('image'), false)
-          const predictions = await this.model_cropper.estimateFaces((this.imageEl2.nativeElement), false)
-          console.log(predictions);
+       
+          // const predictions = await this.model_cropper.estimateFaces((this.imageEl2.nativeElement), false)
+          // console.log(predictions);
           
 
-          var img = document.getElementsByClassName('cont')[0];
-          var canvas = this.imageCroppedCanvas.nativeElement; //document.createElement('canvas');
-          //canvas.id = "mycanvas";
+          // var img = document.getElementsByClassName('cont')[0];
+          // var canvas = this.imageCroppedCanvas.nativeElement;
           
           
-          img.appendChild(canvas);
+          // img.appendChild(canvas);
           
 
-          var context = canvas.getContext('2d');
-          var imageObj = new Image();
-          const start = predictions[0].topLeft;
-          const end = predictions[0].bottomRight;
-          const size = [(end[0] - start[0]) * 1.25 , (end[1] - start[1]) * 1.25];
-          console.log(size);
-          canvas.height = size[1] 
-          canvas.width = size[0]
+          // var context = canvas.getContext('2d');
+          // var imageObj = new Image();
+          // const start = predictions[0].topLeft;
+          // const end = predictions[0].bottomRight;
+          // const size = [(end[0] - start[0]) * 1.25 , (end[1] - start[1]) * 1.25];
+          // console.log(size);
+          // canvas.height = size[1] 
+          // canvas.width = size[0]
 
-          imageObj.onload = function() {
-            // draw cropped image
-            var sourceX = start[0];
-            var sourceY = start[1];
-            var sourceWidth = size[1];
-            var sourceHeight = size[0];
-            var destWidth = size[1];
-            var destHeight = size[0];
-            var destX = 0;
-            var destY = 0;
+          // imageObj.onload = function() {
+          //   // draw cropped image
+          //   var sourceX = start[0];
+          //   var sourceY = start[1];
+          //   var sourceWidth = size[1];
+          //   var sourceHeight = size[0];
+          //   var destWidth = size[1];
+          //   var destHeight = size[0];
+          //   var destX = 0;
+          //   var destY = 0;
 
-            context.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
-          };
-          imageObj.src = this.imageEl2.nativeElement.src
+          //   context.drawImage(imageObj, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight);
+          // };
+          // imageObj.src = this.imageEl2.nativeElement.src
 
 
-          // console.log(imgEl2);
-          // const imgEl2 = this.person.image_crop;
+    
           console.log('mda');
           console.log(this.imageEl.nativeElement);
           console.log(this.imageCroppedCanvas.nativeElement);
-          this.predictions = await this.model.predict([tf.image.resizeBilinear(tf.browser.fromPixels(this.imageEl.nativeElement), [300, 300]).expandDims().toFloat(), tf.image.resizeBilinear(tf.browser.fromPixels(this.imageCroppedCanvas.nativeElement), [300, 300]).expandDims().toFloat()]);
+          this.predictions = await this.model.predict([tf.image.resizeBilinear(tf.browser.fromPixels(this.imageEl.nativeElement), [300, 300]).expandDims().toFloat(), tf.image.resizeBilinear(tf.browser.fromPixels(this.imageEl2.nativeElement), [300, 300]).expandDims().toFloat()]);
           console.log(this.predictions)
           
         }, 0);

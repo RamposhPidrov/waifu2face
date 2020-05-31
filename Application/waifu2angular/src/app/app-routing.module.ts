@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { ProfileComponent } from './persons/profile/profile.component';
 import { ModelUploadComponent } from './model-upload/model-upload.component'
 import { PersonListComponent } from './persons/person-list/person-list.component';
-import { CreatePersonComponent } from './persons/create-person/create-person.component';
 import { PersonsComponent } from './persons/persons.component';
 // import { SearchpersonsComponent } from './search-persons/search-persons.component';
 
