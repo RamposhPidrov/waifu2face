@@ -1,0 +1,22 @@
+<div class="d-flex justify-content-center align-items-center flex-column">
+
+    <h1> Login </h1>
+    <p><b>Name:</b> {{person.name}}</p>
+    <p><b>Job code:</b> {{person.jobcode}}</p>
+    <!-- <img src={{person.image_crop}} class="rounded mx-auto d-block mb-3" style="max-width: 300px;" #personimg> -->
+    <img crossorigin="anonymous" src={{person.image_crop}} #personimg>
+  
+
+    <video crossorigin="anonymous" autoplay playsinline muted id="webcam" width="300" height="300" #video></video>
+  
+    <div *ngIf="loading">
+      <img src="./assets/loading.gif">
+    </div>
+  
+    <div class="list-group">
+      {{predictions}}
+      <!-- <div class="list-group-item" *ngFor="let prediction of predictions">
+        {{prediction.className}} - {{prediction.probability}}
+      </div> -->
+    </div>
+  </div>

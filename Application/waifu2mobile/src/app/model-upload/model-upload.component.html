@@ -1,0 +1,35 @@
+
+<div class="cont d-flex justify-content-center align-items-center flex-column">
+  <h1> Login </h1>
+  <p><b>Name:</b> {{person.name}}</p>
+  <p><b>Job code:</b> {{person.jobcode}}</p>
+  <!-- <img src={{person.image_crop}} class="rounded mx-auto d-block mb-3" style="max-width: 300px;" #personimg> -->
+  <img crossorigin="anonymous" src={{person.image_crop}} #personimg>
+  <!-- here goes imageEl_canvas
+  <canvas id="img1canvas" #imageEl_canvas></canvas> -->
+
+  <div class="custom-file">
+    <input type="file" class="custom-file-input" (change)="fileChangeEvent($event)">
+    <label class="custom-file-label">Choose file</label>
+  </div>
+
+  
+  <div *ngIf="loading; else elseBlock">
+    <img src="./assets/loading.gif">
+  </div>
+
+  <ng-template #elseBlock>
+    <img crossorigin="anonymous" [src]="imageSrc" id="image" #person2img_uploaded *ngIf="imageSrc"/>
+  </ng-template>
+  
+  <canvas id="myCanvas" #cropped_canvas></canvas>
+  
+  <div class="list-group">
+    <!-- <div class="list-group-item" *ngFor="let prediction of predictions"> -->
+      {{predictions}} 
+    <!-- </div> -->
+  </div>
+</div>
+
+<!-- <canvas id="canvas" width="578" height="200"></canvas> -->
+

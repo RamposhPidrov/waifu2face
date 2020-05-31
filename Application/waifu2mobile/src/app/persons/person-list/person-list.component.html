@@ -1,0 +1,11 @@
+<h1>Persons</h1>
+<ul class="list-group">
+<person-details *ngFor="let person of persons"
+[person]="person"
+[index]="person.id"
+ >
+
+</person-details>
+</ul>
+<button (click)="onFetchData()"></button>
+ 
