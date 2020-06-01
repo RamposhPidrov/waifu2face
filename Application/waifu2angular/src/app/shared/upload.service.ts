@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class UploadService {
 
-  DJANGO_SERVER: string = "http://192.168.1.216:8000";
+  DJANGO_SERVER: string = "http://127.0.0.1:8000";
   constructor(private http: HttpClient) { }
 
   public upload(formData) {
