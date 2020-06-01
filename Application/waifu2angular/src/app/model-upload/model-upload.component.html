@@ -31,8 +31,9 @@
   </div>
 
   <div class="align-middle">
-    <button *ngIf="checkdoor else wrongdoor" class="btn btn-success">Success</button>
-    <button #wrongdoor class="btn btn-danger">Danger</button>
+    <button *ngIf="checkdoor==='true'" class="btn btn-success">Success</button>
+    <button *ngIf="checkdoor==='false'" class="btn btn-danger">Login error</button>
+
   </div>
 </div>
 

@@ -45,7 +45,7 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
   // id: string;
   subscription: Subscription;
   persons;
-  checkdoor=false;
+  checkdoor='not loaded';
   form:FormGroup;
 
   constructor( 
@@ -196,10 +196,11 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
           console.log([tf.browser.fromPixels(this.imageEl.nativeElement).cast('float32').expandDims(), tf.browser.fromPixels(this.imageEl.nativeElement).cast('float32').expandDims()])
           this.predictions = this.model.predict([tf.browser.fromPixels(this.imageEl.nativeElement).expandDims(), tf.browser.fromPixels(this.imageEl.nativeElement).expandDims()]);
           console.log(this.predictions.dataSync())
-
+          console.log('final predict:');
+          console.log(this.predictions.dataSync()[0]);
           if(this.predictions.dataSync()[0]<0.5){ //change button
-            this.checkdoor=false;
-          } else this.checkdoor=true;
+            this.checkdoor='false';
+          } else this.checkdoor='true';
 
           this.log_login(); //send log to server
 

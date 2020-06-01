@@ -75,8 +75,8 @@ export class DataStorageService {
     formData.append('user', person.name);
     formData.append('image', image);
     formData.append('body', "checkdoor");
-    console.log(image)
-    console.log(formData)
+    // console.log(image)
+    // console.log(formData)
     
     return this.http.post<any>(`${this.DJANGO_SERVER}/api/log/`, formData);
   }
