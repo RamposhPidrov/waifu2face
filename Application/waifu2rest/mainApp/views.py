@@ -8,7 +8,8 @@ from rest_framework import status
 from rest_framework.response import Response
 
 from .models import Person
-from .serializers import PersonSerializer
+from .serializers import *
+import datetime
 
 class FileUploadView(APIView):
     parser_class = (FileUploadParser,)
@@ -63,6 +64,29 @@ class PersonView(APIView):
         return Response({
             "message": "Person with id `{}` has been deleted.".format(pk)
         }, status=204)
+
+
+
+class LogView(APIView):
+    parser_class = (FileUploadParser,)
+
+    def post(self, request, *args, **kwargs):
+        file_serializer = EventSerializer(data=request.data)
+        if file_serializer.is_valid():
+            time=datetime.datetime.now()
+            if LogFile.objects.filter(Q(name__icontains=datetime.date.today())).exists():
+                log_file = LogFile.objects.filter(Q(name__icontains=datetime.date.today())).last()
+            # file_serializer.action='123123'
+            file_serializer.save(time=time, log_file=log_file)
+            # LogEvent(event)
+        
+
+            return Response(file_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def LogEvent(event):
+       pass
 
 # #@csrf_exempt
 # def person_list(request):

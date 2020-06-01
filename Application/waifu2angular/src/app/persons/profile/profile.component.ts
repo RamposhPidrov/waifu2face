@@ -16,7 +16,7 @@ export class ProfileComponent implements OnInit {
   person: Person;
   id: number;
 
-  DJANGO_SERVER = 'http://192.168.1.216:8000'
+  DJANGO_SERVER = 'http://127.0.0.1:8000'
   form: FormGroup;
   response;
   imageURL;
@@ -71,7 +71,7 @@ export class ProfileComponent implements OnInit {
     formData.append('image_crop', this.form.get('profile').value);
     formData.append('name', this.nameInputRef.nativeElement.value);
     formData.append('jobcode', this.jobcodeInputRef.nativeElement.value);
-
+    // console.log(this.form.get('profile').value)
     this.uploadService.upload(formData).subscribe(
       (res) => {
         this.response = res;

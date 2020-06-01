@@ -1,5 +1,8 @@
 from rest_framework import serializers
-from .models import Person
+from .models import *
+import datetime
+from django.db.models import Q
+from rest_framework.generics import get_object_or_404
 
 class PersonSerializer(serializers.ModelSerializer):
     class Meta:
@@ -25,3 +28,35 @@ class PersonSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+
+class LogFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LogFile
+        fields = "__all__"
+    
+
+class EventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Event
+        fields = "__all__"
+
+    def create(self, validated_data):
+        
+        print(validated_data)
+        today = datetime.date.today()
+        if LogFile.objects.filter(Q(name__icontains=today)).exists():
+            logfileobj = LogFile.objects.filter(Q(name__icontains=today))[0]
+            logfileobj.body += '\n[ {0} ] - {1} - {2} - {3}'.format(validated_data.get('log_type'), datetime.datetime.now(), validated_data.get('action'), validated_data.get('user'))
+            logfileobj.Images += '\n{0}'.format(validated_data.get('image'))
+            logfileobj.save()
+        else:
+            logfileobj = LogFile()
+            logfileobj.name = today 
+            logfileobj.body = '[ {0} ] - {1} - {2} - {3}'.format(validated_data.get('log_type'), datetime.datetime.now(), validated_data.get('action'), validated_data.get('user'))
+            logfileobj.Images = validated_data.get('image')
+            # instance.save()
+            
+            logfileobj.save()
+
+
+        return Event.objects.create(**validated_data)

@@ -10,7 +10,7 @@ import { PersonService } from '../persons/person.service';
 @Injectable({ providedIn: 'root' })
 export class DataStorageService {
   constructor(private http: HttpClient, private personService: PersonService) {}
-  DJANGO_SERVER: string = "http://192.168.1.216:8000";
+  DJANGO_SERVER: string = "http://127.0.0.1:8000";
   error = new Subject<string>();
 
   storepersons() {
@@ -63,6 +63,24 @@ export class DataStorageService {
     );
   }
 
+  public upload(formData) {
+    return this.http.post<any>(`${this.DJANGO_SERVER}/api/persons/`, formData);
+  }
+
+  public log_login(person, image, checkdoor){
+    const formData = new FormData();
+    //console.log(this.form.get('profile').value);
+    formData.append('log_type', "INFO");
+    formData.append('action', "login");
+    formData.append('user', person.name);
+    formData.append('image', image);
+    formData.append('body', "checkdoor");
+    console.log(image)
+    console.log(formData)
+    
+    return this.http.post<any>(`${this.DJANGO_SERVER}/api/log/`, formData);
+  }
+
 //   persons:Person[];
 //   getAll() {
 //     return this.http
@@ -102,9 +120,6 @@ export class DataStorageService {
 //   }
 
 
-  public upload(formData) {
-    return this.http.post<any>(`${this.DJANGO_SERVER}/api/persons/`, formData);
-  }
   // createPerson() {
   
   //   const formData = new FormData();
