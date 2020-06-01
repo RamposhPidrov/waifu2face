@@ -22,7 +22,8 @@
     <img crossorigin="anonymous" [src]="imageSrc" id="image" #person2img_uploaded *ngIf="imageSrc"/>
   </ng-template>
   
-  <canvas id="myCanvas" #cropped_canvas></canvas>
+  <canvas id="myCanvas" #cropped_canvas [ngStyle]="{'border': borderStyle}"></canvas>
+  <lablel id="Poeli cala" #anwser></lablel>
   
   <div class="list-group">
     <!-- <div class="list-group-item" *ngFor="let prediction of predictions"> -->

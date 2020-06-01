@@ -98,7 +98,7 @@ export class Lambda extends tf.layers.Layer {
       let y = input[1].cast('float32')
       // let da = tf.sum(tf.square(tf.sub(input[0], input[1])), 1, true)
       // console.log(tf.sqrt(tf.maximum(da, 0.0000001)))
-      console.log(tf.abs(tf.sub(x, y)).dtype)
+      // console.log(tf.abs(tf.sub(x, y)).dtype)
       // return tf.abs(tf.sub(x, y).cast('float32')).dataSync();
       // return tf.squaredDifference(input[0], input[1]);
       
