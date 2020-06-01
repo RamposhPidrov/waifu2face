@@ -28,7 +28,7 @@ export class ModelWebcamComponent implements OnInit, AfterViewInit {
   @ViewChild('cropped_canvas') imageCroppedCanvas: ElementRef; //cropped
   private trashhold_cropper = 0.95;
   cropper: tf.Tensor;
-  DJANGO_SERVER = 'http://192.168.1.113:8000'
+  DJANGO_SERVER = 'http://192.168.1.216:8000'
   person: Person = new Person(0,"","","","","");
   // id: string;
   subscription: Subscription;
@@ -60,7 +60,8 @@ export class ModelWebcamComponent implements OnInit, AfterViewInit {
 
 
     setInterval(async () => {
-      this.predictions = this.model.predict([tf.browser.fromPixels(this.imageEl.nativeElement).expandDims(), tf.browser.fromPixels(this.video.nativeElement).expandDims()]);
+      console.log('hui')
+      this.predictions = this.model.predict([tf.div(tf.browser.fromPixels(this.imageEl.nativeElement), 255).expandDims().cast('float32'), tf.div(tf.browser.fromPixels(this.video.nativeElement), 255).expandDims().cast('float32')]);
       console.log('predictions');
       console.log(this.predictions);
       // this.predictions = await this.model.classify(this.video.nativeElement);

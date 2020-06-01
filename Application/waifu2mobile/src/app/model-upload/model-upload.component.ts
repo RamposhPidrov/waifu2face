@@ -37,7 +37,7 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
   predictions: tf.Tensor;
   cropper: tf.Tensor;
   
-  DJANGO_SERVER = 'http://192.168.1.113:8000'
+  DJANGO_SERVER = 'http://192.168.1.216:8000'
   loading: boolean;
 
   person: Person = new Person(0,"","","","","");
