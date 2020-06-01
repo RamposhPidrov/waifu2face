@@ -74,7 +74,7 @@ export class DataStorageService {
     formData.append('action', "login");
     formData.append('user', person.name);
     formData.append('image', image);
-    formData.append('body', "checkdoor");
+    formData.append('body', checkdoor);
     // console.log(image)
     // console.log(formData)
     
