@@ -30,6 +30,12 @@
       {{predictions}} 
     <!-- </div> -->
   </div>
+
+  <div class="align-middle">
+    <button *ngIf="checkdoor==='true'" class="btn btn-success">Success</button>
+    <button *ngIf="checkdoor==='false'" class="btn btn-danger">Login error</button>
+
+  </div>
 </div>
 
 <!-- <canvas id="canvas" width="578" height="200"></canvas> -->

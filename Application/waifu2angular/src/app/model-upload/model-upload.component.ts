@@ -10,7 +10,7 @@ import { PersonService } from '../persons/person.service';
 import { Person } from '../persons/person.model';
 import { DataStorageService } from '../shared/data-storage.service';
 import { Subscription } from 'rxjs';
-import { NgStyle } from '@angular/common';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 
 
 tf.serialization.registerClass(HardSwish);  // Needed for serialization.
@@ -38,15 +38,19 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
   predictions: tf.Tensor;
   cropper: tf.Tensor;
   
-  DJANGO_SERVER = 'http://192.168.1.216:8000'
+  DJANGO_SERVER = 'http://127.0.0.1:8000'
   loading: boolean;
 
   person: Person = new Person(0,"","","","","");
   // id: string;
   subscription: Subscription;
   persons;
+  checkdoor='not loaded';
+  form:FormGroup;
 
-  constructor( private personService: PersonService,
+  constructor( 
+    private formBuilder: FormBuilder,
+    private personService: PersonService,
     private route: ActivatedRoute,
     private router: Router,
     private dataStorageService: DataStorageService,
@@ -73,6 +77,10 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
 
 
   async ngOnInit() {
+    this.form = this.formBuilder.group({
+      profile: ['']
+    });
+
     this.loadModels();
 
   }
@@ -105,10 +113,23 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
 
 
 
-
   //when file uploaded
   async fileChangeEvent(event) {
+
+
     if (event.target.files && event.target.files[0]) {
+
+      if (event.target.files.length > 0) {
+        const file = event.target.files[0];
+        this.form.get('profile').setValue(file);
+      }
+      if (event.length === 0)
+      return;
+      var mimeType = event.target.files[0].type;
+      if (mimeType.match(/image\/*/) == null) {
+        return;
+      }
+
       //canvas for image 1
       // var canvas = this.imageEl_canvas.nativeElement; //document.createElement('canvas');
       // canvas.height = this.imageEl.nativeElement.offsetHeight;
@@ -175,7 +196,13 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
           // console.log([tf.browser.fromPixels(this.imageEl.nativeElement).cast('float32').expandDims(), tf.browser.fromPixels(this.imageEl.nativeElement).cast('float32').expandDims()])
           this.predictions = this.model.predict([tf.browser.fromPixels(this.imageEl.nativeElement).expandDims(), tf.browser.fromPixels(this.imageCroppedCanvas.nativeElement).expandDims()]);
           console.log(this.predictions.dataSync())
-          // this.dd = '12px solid #000'
+          console.log('final predict:');
+          console.log(this.predictions.dataSync()[0]);
+          if(this.predictions.dataSync()[0]<0.5){ //change button
+            this.checkdoor='false';
+          } else this.checkdoor='true';
+
+          this.log_login(); //send log to server
 
         }, 0);
 
@@ -183,6 +210,18 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
     }
 
 
+  }
+
+  response
+  log_login(){
+    this.dataStorageService.log_login(this.person, this.form.get('profile').value, this.checkdoor).subscribe(
+      (res) => {
+        this.response = res;  
+      },
+      (err) => {  
+        console.log(err);
+      }
+    );
   }
 
   //http get person by id in url
