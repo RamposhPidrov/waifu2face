@@ -4,7 +4,10 @@
   <p><b>Name:</b> {{person.name}}</p>
   <p><b>Job code:</b> {{person.jobcode}}</p>
   <!-- <img src={{person.image_crop}} class="rounded mx-auto d-block mb-3" style="max-width: 300px;" #personimg> -->
-  <img crossorigin="anonymous" src={{person.image_crop}} #personimg>
+  <img crossorigin="anonymous" src={{person.image_crop}} #personimg hidden>
+  <img src={{person.image_crop}} class="rounded mx-auto d-block mb-3" style="max-width: 300px;">
+
+
   <!-- here goes imageEl_canvas
   <canvas id="img1canvas" #imageEl_canvas></canvas> -->
 
@@ -19,19 +22,20 @@
   </div>
 
   <ng-template #elseBlock>
-    <img crossorigin="anonymous" [src]="imageSrc" id="image" #person2img_uploaded *ngIf="imageSrc"/>
+    <img crossorigin="anonymous" [src]="imageSrc" id="image" #person2img_uploaded *ngIf="imageSrc" hidden/>
+    <img [src]="imageSrc" class="rounded mx-auto d-block mt-3 mb-3" style="max-width: 400px;"/>
   </ng-template>
   
-  <canvas id="myCanvas" #cropped_canvas></canvas>
+  <canvas id="myCanvas" #cropped_canvas class="rounded mx-auto d-block mb-3"></canvas>
   
   <div class="list-group">
     <!-- <div class="list-group-item" *ngFor="let prediction of predictions"> -->
-      {{predictions}} 
+      <!-- {{predictions}}  -->
     <!-- </div> -->
   </div>
 
   <div class="align-middle">
-    <button *ngIf="checkdoor==='true'" class="btn btn-success">Success</button>
+    <!-- <button *ngIf="checkdoor==='false'" class="btn btn-success mt-3">Success</button> -->
     <button *ngIf="checkdoor==='false'" class="btn btn-danger">Login error</button>
 
   </div>

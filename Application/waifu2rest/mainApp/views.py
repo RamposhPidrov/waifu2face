@@ -76,8 +76,11 @@ class LogView(APIView):
             time=datetime.datetime.now()
             if LogFile.objects.filter(Q(name__icontains=datetime.date.today())).exists():
                 log_file = LogFile.objects.filter(Q(name__icontains=datetime.date.today())).last()
+                file_serializer.save(time=time, log_file=log_file)
+            else:
+                file_serializer.save(time=time)
             # file_serializer.action='123123'
-            file_serializer.save(time=time, log_file=log_file)
+            
             # LogEvent(event)
         
 
