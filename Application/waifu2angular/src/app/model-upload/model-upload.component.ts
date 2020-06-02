@@ -38,7 +38,7 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
   predictions: tf.Tensor;
   cropper: tf.Tensor;
   
-  DJANGO_SERVER = 'http://192.168.1.113:8000'
+  DJANGO_SERVER = 'http://192.168.1.216:8000'
   loading: boolean;
 
   person: Person = new Person(0,"","","","","");
@@ -194,7 +194,7 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
           console.log(this.imageEl.nativeElement);
           console.log(this.imageCroppedCanvas.nativeElement);
           console.log([tf.browser.fromPixels(this.imageEl.nativeElement).cast('float32').expandDims(), tf.browser.fromPixels(this.imageEl.nativeElement).cast('float32').expandDims()])
-          this.predictions = this.model.predict([tf.browser.fromPixels(this.imageEl.nativeElement).expandDims(), tf.browser.fromPixels(this.imageEl.nativeElement).expandDims()]);
+          this.predictions = this.model.predict([tf.browser.fromPixels(this.imageEl.nativeElement).expandDims(), tf.browser.fromPixels(this.imageCroppedCanvas.nativeElement).expandDims()]);
 
           console.log('final predict:');
           console.log(this.predictions);

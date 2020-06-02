@@ -16,7 +16,7 @@ export class ProfileComponent implements OnInit {
   person: Person;
   id: number;
 
-  DJANGO_SERVER = 'http://192.168.1.113:8000'
+  DJANGO_SERVER = 'http://192.168.1.216:8000'
   form: FormGroup;
   response;
   imageURL;
