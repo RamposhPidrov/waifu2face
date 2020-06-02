@@ -10,7 +10,7 @@ import { PersonService } from '../persons/person.service';
 @Injectable({ providedIn: 'root' })
 export class DataStorageService {
   constructor(private http: HttpClient, private personService: PersonService) {}
-  DJANGO_SERVER: string = "http://127.0.0.1:8000";
+  DJANGO_SERVER: string = "http://192.168.1.113:8000";
   error = new Subject<string>();
 
   storepersons() {
@@ -74,7 +74,7 @@ export class DataStorageService {
     formData.append('action', "login");
     formData.append('user', person.name);
     formData.append('image', image);
-    formData.append('body', "checkdoor");
+    formData.append('body', checkdoor);
     // console.log(image)
     // console.log(formData)
     
