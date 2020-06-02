@@ -19,8 +19,9 @@
         {{prediction.className}} - {{prediction.probability}}
       </div> -->
     </div>
-    <!-- <div class="align-middle">
-      <button *ngIf="checkdoor else wrongdoor" class="btn btn-success">Success login</button>
-      <button ng-template #wrongdoor class="btn btn-danger">Login error</button>
-    </div> -->
+    <div class="align-middle">
+      <button *ngIf="checkdoor==='true'" class="btn btn-success mt-3">Success</button>
+      <button *ngIf="checkdoor==='false'" class="btn btn-danger mt-3">Login error</button>
+  
+    </div>
   </div>

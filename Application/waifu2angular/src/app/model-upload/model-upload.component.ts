@@ -201,7 +201,7 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
           console.log(this.predictions.dataSync()[0]);
           console.log(this.predictions[0]);
 
-          if(this.predictions.dataSync()[0]<0.5){ //change button
+          if(this.predictions[0]<0.5){ //change button
             this.checkdoor='false';
           } else this.checkdoor='true';
 
