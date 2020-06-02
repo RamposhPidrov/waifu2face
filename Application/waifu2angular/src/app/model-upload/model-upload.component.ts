@@ -38,7 +38,7 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
   predictions: tf.Tensor;
   cropper: tf.Tensor;
   
-  DJANGO_SERVER = 'http://127.0.0.1:8000'
+  DJANGO_SERVER = 'http://192.168.1.113:8000'
   loading: boolean;
 
   person: Person = new Person(0,"","","","","");
@@ -195,9 +195,12 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
           console.log(this.imageCroppedCanvas.nativeElement);
           console.log([tf.browser.fromPixels(this.imageEl.nativeElement).cast('float32').expandDims(), tf.browser.fromPixels(this.imageEl.nativeElement).cast('float32').expandDims()])
           this.predictions = this.model.predict([tf.browser.fromPixels(this.imageEl.nativeElement).expandDims(), tf.browser.fromPixels(this.imageEl.nativeElement).expandDims()]);
-          console.log(this.predictions.dataSync())
+
           console.log('final predict:');
+          console.log(this.predictions);
           console.log(this.predictions.dataSync()[0]);
+          console.log(this.predictions[0]);
+
           if(this.predictions.dataSync()[0]<0.5){ //change button
             this.checkdoor='false';
           } else this.checkdoor='true';

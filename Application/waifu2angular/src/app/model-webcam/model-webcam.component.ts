@@ -28,7 +28,7 @@ export class ModelWebcamComponent implements OnInit, AfterViewInit {
   @ViewChild('cropped_canvas') imageCroppedCanvas: ElementRef; //cropped
   private trashhold_cropper = 0.95;
   cropper: tf.Tensor;
-  DJANGO_SERVER = 'http://127.0.0.1:8000'
+  DJANGO_SERVER = 'http://192.168.1.113:8000'
   person: Person = new Person(0,"","","","","");
   // id: string;
   subscription: Subscription;
