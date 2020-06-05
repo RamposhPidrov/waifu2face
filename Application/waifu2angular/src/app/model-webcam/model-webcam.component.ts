@@ -61,8 +61,11 @@ export class ModelWebcamComponent implements OnInit, AfterViewInit {
 
     setInterval(async () => {
       console.log('hui')
+      
       this.predictions = this.model.predict([tf.div(tf.browser.fromPixels(this.imageEl.nativeElement), 255).expandDims().cast('float32'), tf.div(tf.browser.fromPixels(this.video.nativeElement), 255).expandDims().cast('float32')]);
-      if(this.predictions[0]<0.5){ //change button
+      console.log(this.predictions.dataSync())
+      if(this.predictions.dataSync()[0]>0.5){ 
+        //change button
         this.checkdoor='false';
       } else this.checkdoor='true';
 
