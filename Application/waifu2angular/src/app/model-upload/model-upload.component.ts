@@ -30,15 +30,15 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
 
   @ViewChild('person2img_uploaded') imageEl2: ElementRef; //uploaded image
   @ViewChild('cropped_canvas') imageCroppedCanvas: ElementRef; //cropped
-
-
+  @ViewChild('anwser') anwser: ElementRef;
+  
   private model;
   private model_cropper;
   private trashhold_cropper = 0.95;
   predictions: tf.Tensor;
   cropper: tf.Tensor;
   
-  DJANGO_SERVER = 'http://192.168.1.113:8000'
+  DJANGO_SERVER = 'http://192.168.1.216:8000'
   loading: boolean;
 
   person: Person = new Person(0,"","","","","");
@@ -170,14 +170,14 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
           var imageObj = new Image();
           const start = predictions[0].topLeft;
           const end = predictions[0].bottomRight;
-          const size = [(end[0] - start[0]) * 1.25 , (end[1] - start[1]) * 1.25];
+          const size = [(end[0] - start[0]) * 1.5 , (end[1] - start[1]) * 1.5];
           console.log(size);
           canvas.height = size[1] 
           canvas.width = size[0]
 
           imageObj.onload = function() {
-            var sourceX = start[0];
-            var sourceY = start[1];
+            var sourceX = start[0] - 15;
+            var sourceY = start[1] - 15;
             var sourceWidth = size[1];
             var sourceHeight = size[0];
             var destWidth = size[1];
@@ -194,7 +194,7 @@ export class ModelUploadComponent implements OnInit, AfterContentInit  {
           console.log(this.imageEl.nativeElement);
           console.log(this.imageCroppedCanvas.nativeElement);
           console.log([tf.browser.fromPixels(this.imageEl.nativeElement).cast('float32').expandDims(), tf.browser.fromPixels(this.imageEl.nativeElement).cast('float32').expandDims()])
-          this.predictions = this.model.predict([tf.browser.fromPixels(this.imageEl.nativeElement).expandDims(), tf.browser.fromPixels(this.imageEl.nativeElement).expandDims()]);
+          this.predictions = this.model.predict([tf.browser.fromPixels(this.imageEl.nativeElement).expandDims(), tf.browser.fromPixels(this.imageCroppedCanvas.nativeElement).expandDims()]);
 
           console.log('final predict:');
           console.log(this.predictions);
