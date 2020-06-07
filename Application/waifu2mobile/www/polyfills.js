@@ -3511,7 +3511,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! R:\Kursach\waifu2face\Application\waifu2mobile\src\polyfills.ts */"./src/polyfills.ts");
+module.exports = __webpack_require__(/*! C:\waifu2mobile\src\polyfills.ts */"./src/polyfills.ts");
 
 
 /***/ })

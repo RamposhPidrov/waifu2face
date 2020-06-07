@@ -327,6 +327,7 @@ __webpack_require__.r(__webpack_exports__);
 var _c0 = ["personimg"];
 var _c1 = ["person2img_uploaded"];
 var _c2 = ["cropped_canvas"];
+var _c3 = ["anwser"];
 function ModelUploadComponent_div_18_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div");
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](1, "img", 15);
@@ -462,13 +463,13 @@ var ModelUploadComponent = /** @class */ (function () {
                                         imageObj = new Image();
                                         start = predictions[0].topLeft;
                                         end = predictions[0].bottomRight;
-                                        size = [(end[0] - start[0]) * 1.25, (end[1] - start[1]) * 1.25];
+                                        size = [(end[0] - start[0]) * 1.5, (end[1] - start[1]) * 1.5];
                                         console.log(size);
                                         canvas.height = size[1];
                                         canvas.width = size[0];
                                         imageObj.onload = function () {
-                                            var sourceX = start[0];
-                                            var sourceY = start[1];
+                                            var sourceX = start[0] - 15;
+                                            var sourceY = start[1] - 15;
                                             var sourceWidth = size[1];
                                             var sourceHeight = size[0];
                                             var destWidth = size[1];
@@ -482,7 +483,7 @@ var ModelUploadComponent = /** @class */ (function () {
                                         console.log(this.imageEl.nativeElement);
                                         console.log(this.imageCroppedCanvas.nativeElement);
                                         console.log([_tensorflow_tfjs__WEBPACK_IMPORTED_MODULE_2__["browser"].fromPixels(this.imageEl.nativeElement).cast('float32').expandDims(), _tensorflow_tfjs__WEBPACK_IMPORTED_MODULE_2__["browser"].fromPixels(this.imageEl.nativeElement).cast('float32').expandDims()]);
-                                        this.predictions = this.model.predict([_tensorflow_tfjs__WEBPACK_IMPORTED_MODULE_2__["browser"].fromPixels(this.imageEl.nativeElement).expandDims(), _tensorflow_tfjs__WEBPACK_IMPORTED_MODULE_2__["browser"].fromPixels(this.imageEl.nativeElement).expandDims()]);
+                                        this.predictions = this.model.predict([_tensorflow_tfjs__WEBPACK_IMPORTED_MODULE_2__["browser"].fromPixels(this.imageEl.nativeElement).expandDims(), _tensorflow_tfjs__WEBPACK_IMPORTED_MODULE_2__["browser"].fromPixels(this.imageCroppedCanvas.nativeElement).expandDims()]);
                                         console.log('final predict:');
                                         console.log(this.predictions);
                                         console.log(this.predictions.dataSync()[0]);
@@ -528,11 +529,13 @@ var ModelUploadComponent = /** @class */ (function () {
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵviewQuery"](_c0, true);
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵviewQuery"](_c1, true);
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵviewQuery"](_c2, true);
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵviewQuery"](_c3, true);
         } if (rf & 2) {
             var _t;
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵloadQuery"]()) && (ctx.imageEl = _t.first);
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵloadQuery"]()) && (ctx.imageEl2 = _t.first);
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵloadQuery"]()) && (ctx.imageCroppedCanvas = _t.first);
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵloadQuery"]()) && (ctx.anwser = _t.first);
         } }, decls: 27, vars: 8, consts: [[1, "cont", "d-flex", "justify-content-center", "align-items-center", "flex-column"], ["crossorigin", "anonymous", "hidden", "", 3, "src"], ["personimg", ""], [1, "rounded", "mx-auto", "d-block", "mb-3", 2, "max-width", "300px", 3, "src"], [1, "custom-file"], ["type", "file", 1, "custom-file-input", 3, "change"], [1, "custom-file-label"], [4, "ngIf", "ngIfElse"], ["elseBlock", ""], ["id", "myCanvas", 1, "rounded", "mx-auto", "d-block", "mb-3"], ["cropped_canvas", ""], [1, "list-group"], [1, "align-middle"], ["class", "btn btn-success mt-3", 4, "ngIf"], ["class", "btn btn-danger mt-3", 4, "ngIf"], ["src", "./assets/loading.gif"], ["crossorigin", "anonymous", "id", "image", "hidden", "", 3, "src", 4, "ngIf"], [1, "rounded", "mx-auto", "d-block", "mt-3", "mb-3", 2, "max-width", "400px", 3, "src"], ["crossorigin", "anonymous", "id", "image", "hidden", "", 3, "src"], ["person2img_uploaded", ""], [1, "btn", "btn-success", "mt-3"], [1, "btn", "btn-danger", "mt-3"]], template: function ModelUploadComponent_Template(rf, ctx) { if (rf & 1) {
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 0);
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "h1");
@@ -605,6 +608,9 @@ var ModelUploadComponent = /** @class */ (function () {
         }], imageCroppedCanvas: [{
             type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"],
             args: ['cropped_canvas']
+        }], anwser: [{
+            type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"],
+            args: ['anwser']
         }] }); })();
 
 
@@ -648,6 +654,16 @@ function ModelWebcamComponent_div_15_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](1, "img", 10);
     _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
 } }
+function ModelWebcamComponent_button_19_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "button", 11);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](1, "Success");
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+} }
+function ModelWebcamComponent_button_20_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "button", 12);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](1, "Login error");
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+} }
 var ModelWebcamComponent = /** @class */ (function () {
     function ModelWebcamComponent(personService, route, router, dataStorageService) {
         this.personService = personService;
@@ -684,7 +700,9 @@ var ModelWebcamComponent = /** @class */ (function () {
                                     case 0:
                                         console.log('hui');
                                         this.predictions = this.model.predict([_tensorflow_tfjs__WEBPACK_IMPORTED_MODULE_2__["div"](_tensorflow_tfjs__WEBPACK_IMPORTED_MODULE_2__["browser"].fromPixels(this.imageEl.nativeElement), 255).expandDims().cast('float32'), _tensorflow_tfjs__WEBPACK_IMPORTED_MODULE_2__["div"](_tensorflow_tfjs__WEBPACK_IMPORTED_MODULE_2__["browser"].fromPixels(this.video.nativeElement), 255).expandDims().cast('float32')]);
-                                        if (this.predictions[0] < 0.5) { //change button
+                                        console.log(this.predictions.dataSync());
+                                        if (this.predictions.dataSync()[0] > 0.5) {
+                                            //change button
                                             this.checkdoor = 'false';
                                         }
                                         else
@@ -778,7 +796,7 @@ var ModelWebcamComponent = /** @class */ (function () {
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵloadQuery"]()) && (ctx.imageEl2 = _t.first);
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵloadQuery"]()) && (ctx.imageCroppedCanvas = _t.first);
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵloadQuery"]()) && (ctx.video = _t.first);
-        } }, decls: 23, vars: 5, consts: [[1, "d-flex", "justify-content-center", "align-items-center", "flex-column"], ["crossorigin", "anonymous", 3, "src"], ["personimg", ""], ["crossorigin", "anonymous", "autoplay", "", "playsinline", "", "muted", "", "id", "webcam", "width", "300", "height", "300"], ["video", ""], [4, "ngIf"], [1, "list-group"], [1, "align-middle"], [1, "btn", "btn-success", "mt-3"], [1, "btn", "btn-danger", "mt-3"], ["src", "./assets/loading.gif"]], template: function ModelWebcamComponent_Template(rf, ctx) { if (rf & 1) {
+        } }, decls: 21, vars: 7, consts: [[1, "d-flex", "justify-content-center", "align-items-center", "flex-column"], ["crossorigin", "anonymous", 3, "src"], ["personimg", ""], ["crossorigin", "anonymous", "autoplay", "", "playsinline", "", "muted", "", "id", "webcam", "width", "300", "height", "300"], ["video", ""], [4, "ngIf"], [1, "list-group"], [1, "align-middle"], ["class", "btn btn-success mt-3", 4, "ngIf"], ["class", "btn btn-danger mt-3", 4, "ngIf"], ["src", "./assets/loading.gif"], [1, "btn", "btn-success", "mt-3"], [1, "btn", "btn-danger", "mt-3"]], template: function ModelWebcamComponent_Template(rf, ctx) { if (rf & 1) {
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "div", 0);
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](1, "h1");
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](2, " Login ");
@@ -802,12 +820,8 @@ var ModelWebcamComponent = /** @class */ (function () {
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](17);
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](18, "div", 7);
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](19, "button", 8);
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](20, "Success");
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](21, "button", 9);
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](22, "Login error");
-            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](19, ModelWebcamComponent_button_19_Template, 2, 0, "button", 8);
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](20, ModelWebcamComponent_button_20_Template, 2, 0, "button", 9);
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
         } if (rf & 2) {
@@ -821,6 +835,10 @@ var ModelWebcamComponent = /** @class */ (function () {
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngIf", ctx.loading);
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate1"](" ", ctx.predictions, " ");
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](2);
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngIf", ctx.checkdoor === "true");
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+            _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngIf", ctx.checkdoor === "false");
         } }, directives: [_angular_common__WEBPACK_IMPORTED_MODULE_8__["NgIf"]], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL21vZGVsLXdlYmNhbS9tb2RlbC13ZWJjYW0uY29tcG9uZW50LmNzcyJ9 */"] });
     return ModelWebcamComponent;
 }());
@@ -1437,7 +1455,7 @@ var Lambda = /** @class */ (function (_super) {
             var y = input[1].cast('float32');
             // let da = tf.sum(tf.square(tf.sub(input[0], input[1])), 1, true)
             // console.log(tf.sqrt(tf.maximum(da, 0.0000001)))
-            console.log(_tensorflow_tfjs__WEBPACK_IMPORTED_MODULE_1__["abs"](_tensorflow_tfjs__WEBPACK_IMPORTED_MODULE_1__["sub"](x, y)).dtype);
+            // console.log(tf.abs(tf.sub(x, y)).dtype)
             // return tf.abs(tf.sub(x, y).cast('float32')).dataSync();
             // return tf.squaredDifference(input[0], input[1]);
             console.log('x,y from lambda');
@@ -1716,7 +1734,7 @@ _angular_platform_browser__WEBPACK_IMPORTED_MODULE_3__["platformBrowser"]().boot
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! R:\Kursach\waifu2face\Application\waifu2mobile\src\main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! C:\waifu2mobile\src\main.ts */"./src/main.ts");
 
 
 /***/ }),
